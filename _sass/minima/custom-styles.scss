@@ -1,2 +1,150 @@
 // Placeholder to allow defining custom styles that override everything else.
 // (Use `_sass/minima/custom-variables.scss` to override variable defaults)
+
+/**
+ * Base Overrides
+ */
+ html {
+    height: 100%;
+    min-height: 100%;
+  }
+
+ body {
+    height: 100%;
+    min-height: 100%;
+ }
+
+ main {
+    flex: content;
+ }
+
+ * {
+    box-sizing: border-box;
+ }
+ .page-content-full {
+    padding: $spacing-unit-full 0px;
+ }
+
+ .page-heading-full {
+    @include relative-font-size(2);
+ }
+
+ .footer-col-full {
+    float: center;
+    margin-bottom: calc($spacing-unit / 2);
+    padding: calc($spacing-unit / 4);
+ }
+
+ /**
+ * Wrapper
+ */
+.wrapper-full {
+    height: 100%;
+    min-height: 100%;
+    max-width: -webkit-calc(#{$content-width-full});
+    max-width:         calc(#{$content-width-full});
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: $spacing-unit-full;
+    padding-left: $spacing-unit-full;
+    @extend %clearfix;
+  
+    @include media-query($on-laptop) {
+      max-width: -webkit-calc(#{$content-width-full} - (#{$spacing-unit-full}));
+      max-width:         calc(#{$content-width-full} - (#{$spacing-unit-full}));
+      padding-right: $spacing-unit-full / 2;
+      padding-left: $spacing-unit-full / 2;
+    }
+  }
+  
+  .wrapper-padded {
+    max-width: -webkit-calc(#{$content-width-padded});
+    max-width:         calc(#{$content-width-padded});
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: $spacing-unit-padded;
+    padding-left: $spacing-unit-padded;
+    
+    @include media-query($on-laptop) {
+      max-width: -webkit-calc(#{$content-width-padded} - (#{$spacing-unit-padded}));
+      max-width:         calc(#{$content-width-padded} - (#{$spacing-unit-padded}));
+      padding-right: $spacing-unit-padded / 2;
+      padding-left: $spacing-unit-padded / 2;
+    }
+  }
+
+/**
+ * spacing styles
+ */
+ .evenly-spaced {
+    display: flex;
+    justify-content: space-around;
+  }
+
+/**
+ * Material Icons
+ */
+ .material-symbols-outlined {
+    font-variation-settings: 'wght' 400;
+    &:hover {
+      font-variation-settings: 'wght' 500;
+      cursor: pointer;
+    }
+  }
+
+/**
+ * Polygon
+ */
+
+ .polygon-div {
+    width: 100%;
+    height: 100%;
+    background-color: $polygon-background-color;
+  }
+  
+  .polygon-img {
+    position:fixed;
+    z-index: 1;
+  }
+
+  /**
+ * Tables
+ */
+table {
+    margin-bottom: $spacing-unit;
+    width: 100%;
+    text-align: $table-text-align;
+    color: $table-text-color;
+    border-collapse: collapse;
+    border: 1px solid $table-border-color;
+    tr {
+      &:nth-child(even) {
+        background-color: $table-zebra-color;
+      }
+    }
+    th, td {
+      padding: ($spacing-unit * 33.3333333333 * .01) ($spacing-unit * .5);
+    }
+    th {
+      background-color: $table-header-bg-color;
+      border: 1px solid $table-header-border;
+    }
+    td {
+      border: 1px solid $table-border-color;
+    }
+  
+    @include media-query($on-laptop) {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+              -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+  }
+  
+  /**
+   * Canvas
+   */
+  canvas {
+    width: 100%;
+    height: 100%;
+  }

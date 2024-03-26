@@ -78,7 +78,11 @@
  */
  .evenly-spaced {
     display: flex;
-    justify-content: space-around;
+    flex-direction: row-reverse;
+    align-items: center;
+    span {
+      margin-inline: 15px;
+    }
   }
 
 /**
@@ -90,6 +94,10 @@
       font-variation-settings: 'wght' 500;
       cursor: pointer;
     }
+  }
+
+ .menu-symbol {
+    display: inline-block;
   }
 
 /**

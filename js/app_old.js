@@ -1,5 +1,4 @@
 import { Polygon } from "./polygon.js"
-import { Card } from "./card.js"
 
 class App {
 
@@ -23,7 +22,7 @@ class App {
         this.moveX = 0;
         this.offsetX = 0;
         this.vertices = 4;
-        this.maxVertices = 4;
+        this.maxVertices = 10;
         this.rotate = 0;
 
         // load image
@@ -62,8 +61,6 @@ class App {
         // this.canvas.height = this.stageHeight * this.pixelRatio;
         console.log([this.canvas.width, this.canvas.height])
         this.ctx.scale(this.pixelRatio, this.pixelRatio);
-
-        this.card = new Card()
 
         this.polygon = new Polygon(
             this.stageWidth / 2,

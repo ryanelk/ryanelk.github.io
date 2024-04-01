@@ -1,13 +1,16 @@
 import { Polygon } from "./polygon.js"
-
+const PI2 = Math.PI * 2;
 
 export class Card {
-    constructor(x, y, xRadius, yRadius, project) {
+    constructor(x, y, xRadius, yRadius, project, ctx) {
+        console.log("creating card")
+        console.log([x, y, xRadius, yRadius, project, ctx])
         this.x = x
         this.y = y
         this.xRadius = xRadius
         this.yRadius = yRadius
         this.project = project 
+        this.ctx = ctx
         
         this.closed = true
         this.render()
@@ -15,11 +18,13 @@ export class Card {
 
     // load info
     render() {
+        console.log("rendering")
         this.renderBackground()
         this.renderProject()
     }
 
     renderProject() {
+        console.log("render project")
         if (this.closed) {
             // render image closed
             this.img = new Image();
@@ -27,16 +32,17 @@ export class Card {
 
             // when image is loaded, position relative to parent
             this.img.onload = () => {
-                this.ctx.drawImage(this.img, this.x - this.img.width / 2, y- this.img.height / 2)
+                this.ctx.drawImage(this.img, this.x - this.img.width / 2, this.y - this.img.height / 2)
             }
             // use path from given project
-            this.img.src = '../assets/images/bean.png';
+            this.img.src = this.project.closedImg
         } else {
 
         }
     }
 
     renderBackground() {
+        console.log("render background")
         if (this.closed) {
             // render smaller rectangle
             this.polygon = new Polygon(
@@ -45,6 +51,7 @@ export class Card {
                 this.xRadius,
                 this.yRadius,
                 4,
+                this.ctx,
             )
         } else {
             // render wider rectangle
@@ -55,73 +62,58 @@ export class Card {
                 this.xRadius,
                 this.yRadius,
                 4,
+                this.ctx,
             )
         }
         
     }
 
-    animate(ctx, action, mouseX, mouseY) {
+    animate(action, mouseX, mouseY) {
+        console.log("animate")
+        console.log([action, mouseX, mouseY])
         switch (action) {
             case "close":
                 console.log("close")
                 if (!this.closed) {
-                    this.close(ctx)
+                    this.close()
                 }
                 break
             case "open":
                 console.log("open")
                 if (this.closed) {
-                    this.open(ctx)
+                    this.open()
                 }
                 break
             case "drag":
                 console.log("drag")
-                this.drag(ctx, mouseX, mouseY)
+                this.drag(mouseX, mouseY)
             default:
                 // do mouse hover actions
-                this.hover(ctx, mouseX, mouseY)
+                this.hover(mouseX, mouseY)
         }
     }
 
     // open animation
-    open(ctx) {
+    open() {
+        console.log("open")
         // interpolate values?
         this.closed = false
     }
 
     // close animation
-    close(ctx) {
+    close() {
+        console.log("close")
         // interpolate values?
         this.closed = true
     }
 
-    drag(ctx, mouseX, mouseY) {
+    drag(mouseX, mouseY) {
+        console.log("drag")
         // redefine base x and y
     }
 
-    hover(ctx, mouseX, mouseY) {
+    hover(mouseX, mouseY) {
+        console.log("hover")
         // apply colors to transparent light rect?
-    }
-
-    animate(ctx) {
-        ctx.save();
-        ctx.fillStyle = '#000000';
-        ctx.beginPath();
-
-        const angle = PI2 / this.sides;
-
-        ctx.translate(this.x, this.y);
-
-        this.rotate += moveX * 0.008;
-
-        for (let i = 0; i < this.sides; i++) {
-            const x = this.radius * Math.cos(angle * i);
-            const y = this.radius * Math.sin(angle * i);
-            (i == 0) ? ctx.moveTo(x, y) : ctx.lineTo(x, y); 
-        }
-
-        ctx.fill();
-        ctx.closePath();
-        ctx.restore()
     }
 }

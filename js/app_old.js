@@ -1,4 +1,4 @@
-import { Polygon } from "./polygon.js"
+import { Polygon } from "./rectangle.js"
 
 class App {
 

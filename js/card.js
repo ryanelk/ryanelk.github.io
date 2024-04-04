@@ -1,14 +1,14 @@
-import { Polygon } from "./polygon.js"
+import { Rectangle } from "./rectangle.js"
 const PI2 = Math.PI * 2;
 
 export class Card {
-    constructor(x, y, xRadius, yRadius, project, ctx) {
+    constructor(x, y, w, h, project, ctx) {
         console.log("creating card")
-        console.log([x, y, xRadius, yRadius, project, ctx])
+        console.log([x, y, w, h, project, ctx])
         this.x = x
         this.y = y
-        this.xRadius = xRadius
-        this.yRadius = yRadius
+        this.w = w
+        this.h = h
         this.project = project 
         this.ctx = ctx
         
@@ -32,7 +32,7 @@ export class Card {
 
             // when image is loaded, position relative to parent
             this.img.onload = () => {
-                this.ctx.drawImage(this.img, this.x - this.img.width / 2, this.y - this.img.height / 2)
+                this.ctx.drawImage(this.img, this.x - this.img.width/2, this.y - this.img.height/2)
             }
             // use path from given project
             this.img.src = this.project.closedImg
@@ -45,23 +45,38 @@ export class Card {
         console.log("render background")
         if (this.closed) {
             // render smaller rectangle
-            this.polygon = new Polygon(
+            this.outerRectangle = new Rectangle(
                 this.x,
                 this.y,
-                this.xRadius,
-                this.yRadius,
-                4,
+                this.w,
+                this.h,
+                "#C5B7B7",
+                this.ctx,
+            )
+            this.innerRectangle = new Rectangle(
+                this.x,
+                this.y,
+                this.w - this.w/6,
+                this.h - this.h/6,
+                "#FFFFFF",
                 this.ctx,
             )
         } else {
             // render wider rectangle
-            this.xRadius = this.xRadius * 2
-            this.polygon = new Polygon(
+            this.outerRectangle = new Rectangle(
                 this.x,
                 this.y,
-                this.xRadius,
-                this.yRadius,
-                4,
+                this.w * 2,
+                this.h,
+                "#C5B7B7",
+                this.ctx,
+            )
+            this.innerRectangle = new Rectangle(
+                this.x,
+                this.y,
+                this.w - this.w/6,
+                this.h - this.h/6,
+                "#FFFFFF",
                 this.ctx,
             )
         }

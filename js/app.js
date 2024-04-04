@@ -50,8 +50,8 @@ class App {
         this.card = new Card(
             this.stageWidth / 2,
             this.stageHeight / 2,
+            this.stageWidth / 4,
             this.stageHeight / 3,
-            this.stageHeight / 4,
             {
                 name: "Test Project",
                 closedImg: '../assets/images/bean.png',

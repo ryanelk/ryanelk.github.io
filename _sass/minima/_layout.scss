@@ -3,8 +3,9 @@
  */
 .site-header {
   // border-top: 5px solid $border-color-03;
-  border-bottom: 1px solid $border-color-01;
+  border-bottom: 1px solid $header-background-color;
   padding: $spacing-unit/2 0;
+  background-color: $header-background-color;
 }
 
 .site-title {
@@ -118,8 +119,9 @@
  * Site footer
  */
 .site-footer {
-  border-top: 1px solid $border-color-01;
+  border-top: 1px solid $footer-background-color;
   padding: $spacing-unit 0;
+  background-color: $footer-background-color;
 }
 
 .footer-heading {

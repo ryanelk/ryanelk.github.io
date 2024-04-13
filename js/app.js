@@ -1,102 +1,121 @@
 import { Card } from "./card.js"
+import { Rectangle } from "./rectangle.js"
+import { Utils } from "./utils.js"
+
 
 class App {
-
 
     constructor() {
         this.canvas = document.createElement('canvas')
         this.canvas.height  = this.canvas.offsetHeight;
-        console.log(this.canvas.offsetHeight)
         this.canvas.id = "polygon-canvas"
         document.getElementById("polygon-div").appendChild(this.canvas)
         this.ctx = this.canvas.getContext('2d')
-        // console.log(window.devicePixelRatio)
-        // this.pixelRatio = window.devicePixelRatio > 1 ? 2 : 1;
         this.stageHeight = document.getElementById("polygon-canvas").getBoundingClientRect().height
-        console.log(this.canvas.offsetHeight)
+        this.stageWidth = document.body.clientWidth;
 
-        window.addEventListener('resize', this.resize.bind(this), false);
+        window.addEventListener('resize', this.render.bind(this), false);
         
         this.isDown = false;
-        this.moveX = 0;
-        this.offsetX = 0;
-        this.vertices = 4;
-        this.maxVertices = 4;
-        this.rotate = 0;
-        
+
+        // center card
+        this.center_card_x = this.stageWidth / 2
+        this.center_card_y = this.stageHeight / 2
+        this.center_card_w = this.stageWidth / 4
+        this.center_card_h = this.stageHeight / 3
+
         document.addEventListener('pointerdown', this.onDown.bind(this), false);
         document.addEventListener('pointermove', this.onMove.bind(this), false);
         document.addEventListener('pointerup', this.onUp.bind(this), false);
 
-        // load image
-        this.resize();
-        
+        document.getElementById('polygon-replay').addEventListener('click', this.onReplay.bind(this), false);
+        document.getElementById('polygon-add').addEventListener('click', this.onOpen.bind(this), false);
+        document.getElementById('polygon-remove').addEventListener('click', this.onClose.bind(this), false);
+
         window.requestAnimationFrame(this.animate.bind(this));
+        
+        this.render();
     }
 
-    resize() {
-        this.stageWidth = document.body.clientWidth;
-        console.log([document.getElementById("polygon-canvas").getBoundingClientRect()])
-        // may need to redo clientHeight based on header and footer height
-        console.log([this.stageWidth, this.stageHeight])
-        this.canvas.width = this.stageWidth;
-        // this.canvas.width = this.stageWidth * this.pixelRatio;
+    render() { 
+        this.canvas.width = this.stageWidth
         this.canvas.height = this.stageHeight
-        // this.canvas.height = this.stageHeight * this.pixelRatio;
-        console.log([this.canvas.width, this.canvas.height])
-        // this.ctx.scale(this.pixelRatio, this.pixelRatio);
 
-        // instantiate center card
-        this.card = new Card(
-            this.stageWidth / 2,
-            this.stageHeight / 2,
-            this.stageWidth / 4,
-            this.stageHeight / 3,
-            {
-                name: "Test Project",
-                closedImg: '../assets/images/bean.png',
-            },
-            this.ctx,
-        )
+        // re-render center card
+        if (this.centerCard) {
+            // console.log("rerendering card")
+            this.centerCard.render()
+        } else {
+            // console.log("creating new card")
+            this.centerCard = new Card(
+                this.center_card_x,
+                this.center_card_y,
+                this.center_card_w,
+                this.center_card_h,
+                {
+                    name: "Test Project",
+                    closedImg: '../assets/images/bean.png',
+                },
+                this.ctx,
+            )
+        }
     }
 
     onDown(e) {
-        // set
-        this.isDown = true;
-        this.offsetX = e.clientX;
+        // set down in card?
+        if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard)) {
+            // determine if this is an interaction or a drag
+            if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.toggleBtn)) {
+                this.centerCard.animate("toggle", e.offsetX, e.offsetY,)
+            } else {
+                this.isDown = true
+                this.lastX = e.offsetX
+                this.lastY = e.offsetY
+            }
+        }
+        // interactable button that intercepts input to open up card
+        // otherwise begin drag
+        // will use last movements to "eject" card from screen
+        // card will "respawn" after short timeout
     }
 
     onMove(e) {
         // do hover/drag events
         if (this.isDown) {
-            this.moveX = e.clientX - this.offsetX;
-            this.offsetX = e.clientX;
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            let offsetX = this.lastX - e.offsetX
+            let offsetY = this.lastY - e.offsetY
+            this.centerCard.animate("drag", offsetX, offsetY)
+            this.lastX = e.offsetX
+            this.lastY = e.offsetY
+        } else {
+            // tint/highlight/animate card on mouseover
+            // this.centerCard.animate("hover", e.offsetX, e.offsetY)
         }
+        this.render()
     }
 
     onUp(e) {
         this.isDown = false;
-    }
-
-    onAdd(e) {
-        this.vertices = Math.min(this.vertices + 1, this.maxVertices) 
-        this.resize()
-    }
-
-    onRemove(e) {
-        this.vertices = Math.max(this.vertices - 1, 3)
-        this.resize()
+        // do "eject" if beyond a certain threshold/velocity?
+        // else return to original position?
     }
 
     onReplay(e) {
-        this.resize()
+         // center card
+        this.centerCard.animate("toggle", this.center_card_x, this.center_card_y)
+        // this.render()
     }
 
+    onOpen(e) {
+        this.centerCard.animate("toggle", this.center_card_x, this.center_card_y)
+    }
+
+    onClose(e) {
+        this.centerCard.animate("toggle", this.center_card_x, this.center_card_y)
+    }
     animate() {
         window.requestAnimationFrame(this.animate.bind(this));
-        // this.ctx.save();
-        // do actions to canvas
-        // this.ctx.restore()
     }
 
 }

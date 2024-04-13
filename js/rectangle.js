@@ -14,7 +14,7 @@ export class Rectangle {
     }
 
     render() {
-        console.log("rendering rectangle")
+        // console.log("rendering rectangle width: " + this.w )
         this.ctx.save();
         this.ctx.fillStyle = this.color;
         this.ctx.beginPath();
@@ -24,13 +24,13 @@ export class Rectangle {
         // center
         // this.ctx.moveTo(this.x, this.y)
         // top left
-        this.ctx.moveTo(this.x - this.w/2, this.y - this.h/2)
+        this.ctx.moveTo(Math.floor(this.x - this.w/2), Math.floor(this.y - this.h/2))
         // top right
-        this.ctx.lineTo(this.x + this.w/2, this.y - this.h/2)
+        this.ctx.lineTo(Math.floor(this.x + this.w/2), Math.floor(this.y - this.h/2))
         // bottom right
-        this.ctx.lineTo(this.x + this.w/2, this.y + this.h/2)
+        this.ctx.lineTo(Math.floor(this.x + this.w/2), Math.floor(this.y + this.h/2))
         // bottom left
-        this.ctx.lineTo(this.x - this.w/2, this.y + this.h/2)
+        this.ctx.lineTo(Math.floor(this.x - this.w/2), Math.floor(this.y + this.h/2))
 
 
         this.ctx.fill();

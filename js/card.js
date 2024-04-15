@@ -16,10 +16,13 @@ export class Card {
         this.closed = true
         this.openDuration = 500
         this.closeDuration = 500
+        this.returnDuration = 500
         this.zero = document.timeline.currentTime
         this.rendering = false
-        this.openXDist = this.w/4
+        this.openXDist = this.w
         this.openXOffset = (this.closed) ? 0 : openXDist
+
+        this.w_ = w
 
         this.render()
     }
@@ -29,6 +32,7 @@ export class Card {
         // console.log("rendering")
         if (!this.rendering) {
             this.rendering = true
+            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
             this.renderBackground()
             this.renderProject()
             this.rendering = false
@@ -42,8 +46,8 @@ export class Card {
 
         // redraw image
         if (this.img) {
-            console.log("openx: " + this.openXOffset)
-            x = this.x - this.img.width/2 - this.openXOffset
+            console.log("openx: " + this.openXOffset/2)
+            x = this.x - this.img.width/2 - this.openXOffset/2
             y = this.y - this.img.height/2 
             this.ctx.drawImage(this.img, x, y)
         } else {
@@ -52,13 +56,21 @@ export class Card {
 
             // when image is loaded, position relative to parent
             this.img.onload = () => {
-                x = this.x - this.img.width/2  - this.openXOffset
+                x = this.x - this.img.width/2  - this.openXOffset/2
                 y = this.y - this.img.height/2 
                 this.ctx.drawImage(this.img, x, y)
             }
             // use path from given project
             this.img.src = this.project.closedImg
         }
+    }
+
+    renderProjectTitle() {
+        this.ctx.strokeStyle = "#361D29"
+        this.ctx.fillStyle = "#361D29"
+        this.ctx.font = '48px Roboto-Regular';
+        this.ctx.textAlign = "center"
+        this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
     }
 
     renderProjectDescription() {
@@ -86,49 +98,61 @@ export class Card {
     renderProject() {
         // console.log("render project")
         this.renderProjectImage()
+        this.renderProjectTitle()
         this.renderProjectDescription()
         this.renderToggleBtn()
     }
 
+    // renderOuterRectangle() {
+    //     // console.log("render outer rect")
+    //     let w = this.w
+    //     if (this.outerRectangle) {
+    //         this.outerRectangle.x = this.x
+    //         this.outerRectangle.y = this.y
+    //         this.outerRectangle.w = w
+    //         this.outerRectangle.render()
+    //     } else {
+    //         this.outerRectangle = new Rectangle(
+    //             this.x,
+    //             this.y,
+    //             w,
+    //             this.h,
+    //             "#C5B7B7",
+    //             this.ctx,
+    //         )
+    //     }
+    // }
+
     renderOuterRectangle() {
         // console.log("render outer rect")
-        let w = this.w
-        if (this.outerRectangle) {
-            this.outerRectangle.x = this.x
-            this.outerRectangle.y = this.y
-            this.outerRectangle.w = w
-            this.outerRectangle.render()
-        } else {
-            this.outerRectangle = new Rectangle(
-                this.x,
-                this.y,
-                w,
-                this.h,
-                "#C5B7B7",
-                this.ctx,
-            )
-        }
+        this.ctx.save();
+        this.ctx.beginPath();
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        this.ctx.strokeStyle = "#C5B7B7"
+        this.ctx.fillStyle = "#C5B7B7"
+        this.ctx.roundRect(x, y, this.w, this.h, 5)
+        this.ctx.stroke()
+        this.ctx.fill()
+        this.ctx.closePath();
+        this.ctx.restore()
     }
 
     renderInnerRectangle() {
         // console.log("render inner rect")
-        let w = this.w  - this.w/6
+        this.ctx.save();
+        this.ctx.beginPath();
+        let w = this.w_ - this.w_/6
         let h = this.h - this.h/6
-        if (this.innerRectangle) {
-            this.innerRectangle.x = this.x
-            this.innerRectangle.y = this.y
-            this.innerRectangle.w = w
-            this.innerRectangle.render()
-        } else {
-            this.innerRectangle = new Rectangle(
-                this.x,
-                this.y,
-                w,
-                h,
-                "#FFFFFF",
-                this.ctx,
-            )
-        }
+        let x = this.x - (w/2 + this.openXOffset/2)
+        let y = this.y - h/2
+        this.ctx.strokeStyle = "#FFFFFF"
+        this.ctx.fillStyle = "#FFFFFF"
+        this.ctx.roundRect(x, y, w, h, 5)
+        this.ctx.stroke()
+        this.ctx.fill() 
+        this.ctx.closePath();
+        this.ctx.restore()
     }
 
     renderBackground() {
@@ -158,7 +182,16 @@ export class Card {
                 break
             case "move":
                 // console.log("move")
-                Utils.move(mouseX, mouseY, this)
+                if (!this.animating) {
+                    this.animating = true
+                    this.zero = document.timeline.currentTime
+
+                    this.x_old = this.x
+                    this.y_old = this.y
+                    this.x_new = mouseX
+                    this.y_new = mouseY
+                    requestAnimationFrame(this.move.bind(this))
+                }
                 break
             case "hover":
                 // console.log("hover")
@@ -192,6 +225,9 @@ export class Card {
             requestAnimationFrame((t) => this.openCard(t))
         } else {
             console.log("animation done")
+            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old + this.openXDist, 1, "easein"))
+            this.openXOffset = Math.floor(Utils.lerp(0, this.openXDist, 1, "easeinx2"))
+            this.render()
             // animation done
             this.closed = false
             this.animating = false
@@ -208,13 +244,34 @@ export class Card {
         if (v < 1) {
             // set values with v
             this.w = Math.floor(Utils.lerp(this.w_old, this.w_old - this.openXDist, v, "easeout"))
-            this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, v, "easeoutx2spike"))
+            this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, v, "easeoutx2"))
             this.render()
             requestAnimationFrame((t) => this.closeCard(t))
         } else {
             console.log("animation done")
+            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old - this.openXDist, 1, "easeout"))
+            this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, 1, "easeoutx2"))
+            this.render()
             // animation done
             this.closed = true
+            this.animating = false
+        }
+    }
+
+    move(ts) {
+        let v = (ts - this.zero) / this.returnDuration
+        if (v < 1) {
+            // set values with v
+            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), v, "easeout"))
+            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), v, "easeout"))
+            this.render()
+            requestAnimationFrame((t) => this.move(t))
+        } else {
+            console.log("animation done")
+            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), 1, "easeout"))
+            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), 1, "easeout"))
+            this.render()
+            // animation done
             this.animating = false
         }
     }

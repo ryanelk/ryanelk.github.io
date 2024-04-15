@@ -23,6 +23,16 @@ class App {
         this.center_card_y = this.stageHeight / 2
         this.center_card_w = this.stageWidth / 4
         this.center_card_h = this.stageHeight / 3
+        
+        // add font
+        let f = new FontFace('Roboto-Regular', 'url(../assets/fonts/Roboto-Regular.ttf)');
+        f.load().then((font) => {
+            // Ready to use the font in a canvas context
+            console.log('font ready');
+            // Add font on the html page
+            document.fonts.add(font);
+            this.render()
+        });
 
         document.addEventListener('pointerdown', this.onDown.bind(this), false);
         document.addEventListener('pointermove', this.onMove.bind(this), false);
@@ -66,7 +76,7 @@ class App {
         if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard)) {
             // determine if this is an interaction or a drag
             if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.toggleBtn)) {
-                this.centerCard.animate("toggle", e.offsetX, e.offsetY,)
+                this.centerCard.animate("toggle", e.offsetX, e.offsetY)
             } else {
                 this.isDown = true
                 this.lastX = e.offsetX
@@ -99,6 +109,7 @@ class App {
         this.isDown = false;
         // do "eject" if beyond a certain threshold/velocity?
         // else return to original position?
+        this.centerCard.animate("move", this.center_card_x, this.center_card_y)
     }
 
     onReplay(e) {

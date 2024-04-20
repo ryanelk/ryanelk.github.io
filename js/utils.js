@@ -86,4 +86,12 @@ export class Utils {
         // console.log(t)
         return from + (to - from) * t
     }
+
+    static cards = [
+        {
+            name: "Test Project",
+            closedImg: '../assets/images/bean.png',
+        }, 
+    ]
+
 }

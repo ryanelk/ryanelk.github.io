@@ -86,14 +86,32 @@
   }
 
 /**
+ * spacing styles
+ */
+ .evenly-spaced-center {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: center;
+  span {
+    margin-inline: 15px;
+  }
+}
+
+/**
  * Material Icons
  */
  .material-symbols-outlined {
     font-variation-settings: 'wght' 400;
+    visibility: visible;
     &:hover {
       font-variation-settings: 'wght' 500;
       cursor: pointer;
     }
+  }
+
+  .disabled {
+    visibility: hidden;
   }
 
  .menu-symbol {

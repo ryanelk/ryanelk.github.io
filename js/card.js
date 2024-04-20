@@ -197,6 +197,13 @@ export class Card {
                 // console.log("hover")
                 Utils.hover(mouseX, mouseY, this)
                 break
+            case "exit":
+                // move to offscreen point?
+                break
+            case "enter":
+                // move to center point
+                
+                break
         }
     }
 

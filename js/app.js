@@ -77,7 +77,7 @@ class App {
         // document.getElementById('polygon-remove').addEventListener('click', this.onClose.bind(this), false);
 
         document.getElementById('arrow-back').addEventListener('click', this.onBack.bind(this), false);
-        document.getElementById('project-info').addEventListener('click', this.onToggle.bind(this), false);
+        document.getElementById('project-info').addEventListener('click', this.onExpand.bind(this), false);
         document.getElementById('arrow-forward').addEventListener('click', this.onForward.bind(this), false);
 
         window.requestAnimationFrame(this.animate.bind(this));
@@ -122,8 +122,8 @@ class App {
         // set down in card?
         if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard)) {
             // determine if this is an interaction or a drag
-            if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.toggleBtn)) {
-                this.centerCard.animate("toggle", e.offsetX, e.offsetY)
+            if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.expandBtn)) {
+                this.centerCard.animate("expand", e.offsetX, e.offsetY)
             } else {
                 this.isDown = true
                 this.lastX = e.offsetX
@@ -161,12 +161,12 @@ class App {
 
     onReplay(e) {
          // center card
-        this.centerCard.animate("toggle", this.center_card_x, this.center_card_y)
+        this.centerCard.animate("expand", this.center_card_x, this.center_card_y)
         // this.render()
     }
 
-    onToggle(e) {
-        this.centerCard.animate("toggle", this.center_card_x, this.center_card_y)
+    onExpand(e) {
+        this.centerCard.animate("expand", this.center_card_x, this.center_card_y)
     }
 
     onBack(e) {

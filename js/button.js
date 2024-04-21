@@ -1,10 +1,11 @@
 export class Button {
-    constructor(x, y, src, color, ctx) {
+    constructor(x, y, id, closed, color, ctx) {
         this.x = x
         this.y = y
-        this.src = src
+        this.id = id
         this.color = color
         this.ctx = ctx
+        this.closed = closed
 
         this.render()
     }
@@ -29,7 +30,7 @@ export class Button {
                 this.h = this.img.height/2
             }
             // use button path
-            this.img.src = this.src
+            this.img.src = `../assets/images/${this.id}${this.closed ? 0 : 1}.png`
         }
     }
 }

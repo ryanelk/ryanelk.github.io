@@ -46,7 +46,7 @@ export class Card {
 
         // redraw image
         if (this.img) {
-            console.log("openx: " + this.openXOffset/2)
+            // console.log("openx: " + this.openXOffset/2)
             x = this.x - this.img.width/2 - this.openXOffset/2
             y = this.y - this.img.height/2 
             this.ctx.drawImage(this.img, x, y)
@@ -82,16 +82,42 @@ export class Card {
         }
     }
 
-    renderToggleBtn() {
-        // console.log("render toggle button")
-        let x = this.x + (this.w/2 - this.w/6)
-        let y = this.y + (this.h/2 - this.h/6)
-        if (this.toggleBtn) {
-            this.toggleBtn.x = x
-            this.toggleBtn.y = y
-            this.toggleBtn.render()
+    renderExpandBtn() {
+        // console.log("render expand button")
+        let x = this.x + (this.w/2 - this.w/26) + this.openXOffset/26
+        let y = this.y + (this.h/2 - this.h/26)
+        if (this.expandBtn && this.expandBtn.closed == this.closed) {
+            // console.log([this.expandBtn.closed, this.closed])
+            this.expandBtn.x = x
+            this.expandBtn.y = y
+            this.expandBtn.render()
         } else {
-            this.toggleBtn = new Button(x, y, "../assets/images/button.png",  "#C5B7B7", this.ctx) 
+            // console.log("making a new button")
+            // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
+            this.expandBtn = new Button(x, y, "expand_card_", this.closed, "#C5B7B7", this.ctx) 
+        }
+    }
+
+    renderDragIndicator() {
+        // console.log("render expand button")
+        let x, y
+        if (this.dragIndicator) {
+            // console.log("openx: " + this.openXOffset/2)
+            x = this.x - (this.w/2 - this.w/60) - this.openXOffset/60
+            y = this.y - this.dragIndicator.height/2 
+            this.ctx.drawImage(this.dragIndicator, x, y)
+        } else {
+            this.dragIndicator = new Image();
+            // this.img.className = 'polygon-img'
+
+            // when image is loaded, position relative to parent
+            this.dragIndicator.onload = () => {
+                x = this.x - (this.w/2 - this.w/60) - this.openXOffset/60
+                y = this.y - this.dragIndicator.height/2 
+                this.ctx.drawImage(this.dragIndicator, x, y)
+            }
+            // use path from given project
+            this.dragIndicator.src = `../assets/images/drag_indicator.png`
         }
     }
 
@@ -100,7 +126,8 @@ export class Card {
         this.renderProjectImage()
         this.renderProjectTitle()
         this.renderProjectDescription()
-        this.renderToggleBtn()
+        this.renderExpandBtn()
+        this.renderDragIndicator()
     }
 
     // renderOuterRectangle() {
@@ -122,6 +149,20 @@ export class Card {
     //         )
     //     }
     // }
+
+    renderShadow() {
+        this.ctx.save();
+        this.ctx.beginPath();
+        let x = this.x - this.w/2
+        let y = this.y - this.h/2
+        this.ctx.strokeStyle = "#77787a"
+        this.ctx.fillStyle = "#77787a"
+        this.ctx.roundRect(x - 4, y + 4, this.w, this.h, 5)
+        this.ctx.stroke()
+        this.ctx.fill()
+        this.ctx.closePath();
+        this.ctx.restore()
+    }
 
     renderOuterRectangle() {
         // console.log("render outer rect")
@@ -157,6 +198,7 @@ export class Card {
 
     renderBackground() {
         // console.log("render background")
+        this.renderShadow()
         this.renderOuterRectangle()
         this.renderInnerRectangle()
     }
@@ -166,9 +208,9 @@ export class Card {
         // console.log("animate")
         // console.log([action, mouseX, mouseY])
         switch (action) {
-            case "toggle":
+            case "expand":
                 if (!this.animating) {
-                    // console.log("toggle")
+                    // console.log("expand")
                     this.animating = true
                     this.zero = document.timeline.currentTime
                     this.w_old = this.w
@@ -202,7 +244,7 @@ export class Card {
                 break
             case "enter":
                 // move to center point
-                
+
                 break
         }
     }
@@ -222,6 +264,7 @@ export class Card {
         // console.log([ts, this.zero, this.w_old])
         // determine interpolation style
         let v = (ts - this.zero) / this.openDuration
+        this.closed = false
         // interpolate values from 0-1
         if (v < 1) {
             // set values with v
@@ -236,7 +279,6 @@ export class Card {
             this.openXOffset = Math.floor(Utils.lerp(0, this.openXDist, 1, "easeinx2"))
             this.render()
             // animation done
-            this.closed = false
             this.animating = false
         }
     }
@@ -247,6 +289,7 @@ export class Card {
         // console.log([ts, this.zero, this.w_old])
         // determine interpolation style
         let v = (ts - this.zero) / this.closeDuration
+        this.closed = true
         // interpolate values from 0-1
         if (v < 1) {
             // set values with v
@@ -260,7 +303,6 @@ export class Card {
             this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, 1, "easeoutx2"))
             this.render()
             // animation done
-            this.closed = true
             this.animating = false
         }
     }
@@ -285,8 +327,8 @@ export class Card {
 
     hover(mouseX, mouseY) {
         // console.log("hover")
-        if (Utils.in_bounds(mouseX, mouseY, this.toggleBtn)) {
-            this.toggleBtn.hover()
+        if (Utils.in_bounds(mouseX, mouseY, this.expandBtn)) {
+            this.expandBtn.hover()
         }
         // apply colors to transparent light rect?
     }

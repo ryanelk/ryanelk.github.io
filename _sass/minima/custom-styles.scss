@@ -110,6 +110,13 @@
     }
   }
 
+  .clickable-text {
+    visibility: visible;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   .disabled {
     visibility: hidden;
   }

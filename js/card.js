@@ -5,24 +5,24 @@ const PI2 = Math.PI * 2;
 
 export class Card {
     constructor(x, y, w, h, project, ctx) {
-        console.log("creating card")
-        console.log([x, y, w, h, project, ctx])
+        this.closed = true
         this.x = x
         this.y = y
-        this.w = w
+        this.w = (this.closed) ? w : w * 2
         this.h = h
         this.project = project 
         this.ctx = ctx
-        this.closed = true
-        this.openDuration = 500
-        this.closeDuration = 500
-        this.returnDuration = 500
+        this.openDuration = 400
+        this.closeDuration = 400
+        this.returnDuration = 400
+        this.flipDuration = 400
         this.zero = document.timeline.currentTime
         this.rendering = false
-        this.openXDist = this.w
-        this.openXOffset = (this.closed) ? 0 : openXDist
+        this.openXDist = w
+        this.openXOffset = (this.closed) ? 0 : this.openXDist
 
         this.w_ = w
+        this.h_ = w
 
         this.render()
     }
@@ -46,19 +46,23 @@ export class Card {
 
         // redraw image
         if (this.img) {
+            if (this.w > this.img.width && this.h > this.img.height) {
             // console.log("openx: " + this.openXOffset/2)
-            x = this.x - this.img.width/2 - this.openXOffset/2
-            y = this.y - this.img.height/2 
-            this.ctx.drawImage(this.img, x, y)
+                x = this.x - this.img.width/2 - this.openXOffset/2
+                y = this.y - this.img.height/2 
+                this.ctx.drawImage(this.img, x, y)
+            }
         } else {
             this.img = new Image();
             // this.img.className = 'polygon-img'
 
             // when image is loaded, position relative to parent
             this.img.onload = () => {
-                x = this.x - this.img.width/2  - this.openXOffset/2
-                y = this.y - this.img.height/2 
-                this.ctx.drawImage(this.img, x, y)
+                if (this.w > this.img.width && this.h > this.img.height) {
+                    x = this.x - this.img.width/2  - this.openXOffset/2
+                    y = this.y - this.img.height/2 
+                    this.ctx.drawImage(this.img, x, y)
+                }
             }
             // use path from given project
             this.img.src = this.project.closedImg
@@ -70,7 +74,7 @@ export class Card {
         this.ctx.fillStyle = "#361D29"
         this.ctx.font = '48px Roboto-Regular';
         this.ctx.textAlign = "center"
-        this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
+        // this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
     }
 
     renderProjectDescription() {
@@ -80,6 +84,24 @@ export class Card {
             // load font?
             // size and format font?
         }
+    }
+
+    renderProjectLink() {
+        if (!this.closed) {
+            let x = this.x + (this.w/2 - this.w/8) + this.openXOffset/8
+            let y = this.y + (this.h/2 - this.h/8)
+            if (this.projectLink) {
+                // console.log([this.expandBtn.closed, this.closed])
+                this.projectLink.x = x
+                this.projectLink.y = y
+                this.projectLink.render()
+            } else {
+                // console.log("making a new button")
+                // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
+                this.projectLink = new Button(x, y, "link_", this.closed, "#C5B7B7", this.ctx) 
+            }
+        }
+
     }
 
     renderExpandBtn() {
@@ -126,29 +148,10 @@ export class Card {
         this.renderProjectImage()
         this.renderProjectTitle()
         this.renderProjectDescription()
+        this.renderProjectLink()
         this.renderExpandBtn()
         this.renderDragIndicator()
     }
-
-    // renderOuterRectangle() {
-    //     // console.log("render outer rect")
-    //     let w = this.w
-    //     if (this.outerRectangle) {
-    //         this.outerRectangle.x = this.x
-    //         this.outerRectangle.y = this.y
-    //         this.outerRectangle.w = w
-    //         this.outerRectangle.render()
-    //     } else {
-    //         this.outerRectangle = new Rectangle(
-    //             this.x,
-    //             this.y,
-    //             w,
-    //             this.h,
-    //             "#C5B7B7",
-    //             this.ctx,
-    //         )
-    //     }
-    // }
 
     renderShadow() {
         this.ctx.save();
@@ -196,17 +199,35 @@ export class Card {
         this.ctx.restore()
     }
 
+    renderInnerRectangle2() {
+        // console.log("render inner rect")
+        this.ctx.save();
+        this.ctx.beginPath();
+        let w = this.w_ - this.w_/6
+        let h = this.h - this.h/6
+        let x = this.x - w/2 + (this.openXOffset/2)
+        let y = this.y - h/2
+        this.ctx.strokeStyle = "#FFFFFF"
+        this.ctx.fillStyle = "#FFFFFF"
+        this.ctx.roundRect(x, y, w, h, 5)
+        this.ctx.stroke()
+        this.ctx.fill() 
+        this.ctx.closePath();
+        this.ctx.restore()
+    }
+
     renderBackground() {
         // console.log("render background")
         this.renderShadow()
         this.renderOuterRectangle()
         this.renderInnerRectangle()
+        this.renderInnerRectangle2()
     }
 
     animate(action, mouseX, mouseY) {
         // prevent other animations from occurring if animating
-        // console.log("animate")
-        // console.log([action, mouseX, mouseY])
+        console.log("animate")
+        console.log([action, mouseX, mouseY])
         switch (action) {
             case "expand":
                 if (!this.animating) {
@@ -223,8 +244,8 @@ export class Card {
                 Utils.drag(mouseX, mouseY, this)
                 break
             case "move":
-                // console.log("move")
-                if (!this.animating) {
+                if (!this.animating && (this.x != mouseX && this.y != mouseY)) {
+                    console.log("move")
                     this.animating = true
                     this.zero = document.timeline.currentTime
 
@@ -235,16 +256,24 @@ export class Card {
                     requestAnimationFrame(this.move.bind(this))
                 }
                 break
+            case "flipVertical":
+                console.log("flip vertical")
+                if (!this.animating) {
+                    this.animating = true
+                    this.zero = document.timeline.currentTime
+                    this.h_old = this.h
+                    requestAnimationFrame(this.flipVertical.bind(this))
+                }
+                break
             case "hover":
                 // console.log("hover")
-                Utils.hover(mouseX, mouseY, this)
+                this.hover(mouseX, mouseY, this)
                 break
             case "exit":
                 // move to offscreen point?
                 break
             case "enter":
                 // move to center point
-
                 break
         }
     }
@@ -307,18 +336,54 @@ export class Card {
         }
     }
 
+    flipHorizontal(ts) {
+        // reduce card and components to width 0
+        // grow card and components to og width
+    }
+
+    flipVertical(ts) {
+        let v = (ts - this.zero) / this.flipDuration
+        // reduce card and components to width 0
+        // need to perform in two stages
+        if (v <= 0.5) {
+            // set values with v
+            this.h = Math.floor(Utils.lerp(this.h_old, 0, Utils.mapRange(v, 0, 0.5, 0, 1), "easeout"))
+            this.render()
+            requestAnimationFrame((t) => this.flipVertical(t))
+        } else if (v < 1) {
+            this.clearProject()
+            // load next project if necessary
+            this.h = Math.floor(Utils.lerp(0, this.h_old, Utils.mapRange(v, 0.5, 1, 0, 1), "easeout"))
+            this.render()
+            requestAnimationFrame((t) => this.flipVertical(t))
+        } else {
+            console.log("animation done")
+            this.h = Math.floor(Utils.lerp(0, this.h_old, 1, "easeout"))
+            this.render()
+            // animation done
+            this.animating = false
+        }
+    }
+
+    clearProject() {
+        if (this.img || this.projectLink) {
+            this.img = null
+            this.projectLink = null
+        }
+    }
+
     move(ts) {
         let v = (ts - this.zero) / this.returnDuration
         if (v < 1) {
             // set values with v
-            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), v, "easeout"))
-            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), v, "easeout"))
+            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), v, "easeoutx2"))
+            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), v, "easeoutx2"))
             this.render()
             requestAnimationFrame((t) => this.move(t))
         } else {
             console.log("animation done")
-            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), 1, "easeout"))
-            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), 1, "easeout"))
+            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), 1, "easeoutx2"))
+            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), 1, "easeoutx2"))
             this.render()
             // animation done
             this.animating = false

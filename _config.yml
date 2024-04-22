@@ -1,11 +1,12 @@
-title: Ryan El Khoury | Works
+title: Ryan El Khoury
 author:
   name: Ampersands
   email:
 
 # The `>` after `description:` means to ignore line-breaks until next key.
 # If you want to omit the line-break after the end of text, use `>-` instead.
-description:
+description: >
+  | Works
 
 # Build settings
 

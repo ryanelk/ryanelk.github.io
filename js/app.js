@@ -16,7 +16,7 @@ class App {
         window.addEventListener('resize', this.render.bind(this), false);
         
         this.isDown = false
-        this.cardIdx = 0
+        this.cardIdx = Utils.cards.length - 1
 
         // center card
         this.center_card_x = this.stageWidth / 2
@@ -53,8 +53,9 @@ class App {
         document.addEventListener('pointermove', this.onMove.bind(this), false);
         document.addEventListener('pointerup', this.onUp.bind(this), false);
 
-        document.addEventListener('keypress', function(e) {
-            switch (e.key) {
+        document.addEventListener('keydown', (e) => {
+            console.log(e.code)
+            switch (e.code) {
                 case 'ArrowUp':
                     // up arrow
                     break
@@ -68,6 +69,9 @@ class App {
                 case 'ArrowRight':
                     // right arrow
                     this.onForward()
+                    break
+                case "Space":
+                    this.onExpand()
                     break
             }
         })
@@ -91,6 +95,7 @@ class App {
         // re-render center card
         if (this.centerCard) {
             // console.log("rerendering card")
+            // rerender project info and arrows
             this.centerCard.render()
         } else {
             // console.log("creating new card")
@@ -105,17 +110,41 @@ class App {
         }
     }
 
+    checkDisabled() {
+        if (this.cardIdx == 0 && !this.forwardBtn.classList.contains("disabled")) {
+            this.forwardBtn.classList.add("disabled")
+        }
+        if (this.cardIdx > 0 && this.forwardBtn.classList.contains("disabled")) {
+            this.forwardBtn.classList.remove("disabled")
+        }
+        if (this.cardIdx == Utils.cards.length - 1 && !this.backBtn.classList.contains("disabled")) {
+            this.backBtn.classList.add("disabled")
+        }
+        if (this.cardIdx < Utils.cards.length - 1 && this.backBtn.classList.contains("disabled")) {
+            this.backBtn.classList.remove("disabled")
+        }
+    }
+
     forward() {
-        // advance to next card by completing action
-        // create a new card if it doesn't exist
-        // (shows that it can be done and complete animation)
-        this.cardIdx = Math.max(Utils.cards.length, this.cardIdx + 1)
-        this.centerCard
+        if (!this.centerCard.animating) {
+            this.cardIdx = Math.max(0, this.cardIdx - 1)
+            this.checkDisabled()
+            this.centerCard.project = Utils.cards[this.cardIdx]
+            this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name
+            console.log(this.centerCard.project)
+            this.centerCard.animate("flipVertical", 0, 0)
+        }
     }
 
     back() {
-        // restart to previous card
-        // (quickly reset)
+        if (!this.centerCard.animating) {
+            this.cardIdx = Math.min(Utils.cards.length - 1, this.cardIdx + 1)
+            this.checkDisabled()
+            this.centerCard.project = Utils.cards[this.cardIdx]
+            this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name
+            console.log(this.centerCard.project)
+            this.centerCard.animate("flipVertical", 0, 0)
+        }
     }
 
     onDown(e) {
@@ -124,6 +153,9 @@ class App {
             // determine if this is an interaction or a drag
             if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.expandBtn)) {
                 this.centerCard.animate("expand", e.offsetX, e.offsetY)
+            } else if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.projectLink)) {
+                // take user to link
+                window.open(this.centerCard.project.link, "_blank").focus()
             } else {
                 this.isDown = true
                 this.lastX = e.offsetX
@@ -147,7 +179,7 @@ class App {
             this.lastY = e.offsetY
         } else {
             // tint/highlight/animate card on mouseover
-            // this.centerCard.animate("hover", e.offsetX, e.offsetY)
+            this.centerCard.animate("hover", e.offsetX, e.offsetY)
         }
         this.render()
     }
@@ -166,7 +198,7 @@ class App {
     }
 
     onExpand(e) {
-        this.centerCard.animate("expand", this.center_card_x, this.center_card_y)
+        this.centerCard.animate("expand", 0, 0)
     }
 
     onBack(e) {

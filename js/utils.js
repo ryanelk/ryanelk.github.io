@@ -87,10 +87,70 @@ export class Utils {
         return from + (to - from) * t
     }
 
+    static mapRange(v, start_0, end_0, start_1, end_1) {
+        return (v - start_0) / (end_0 - start_0) * (end_1 - start_1) + start_1
+    }
+
     static cards = [
         {
-            name: "Test Project",
-            closedImg: '../assets/images/bean.png',
+            name: "Drop Dial",
+            closedImg: '../assets/images/projects/0.png',
+            link: "https://shuixian.itch.io/drop-dial"
+        },
+        {
+            name: "Summit Shake!",
+            closedImg: '../assets/images/projects/1.png',
+            link: "https://ampersands.itch.io/summit-shake"
+        },
+        {
+            name: "¡Esperé!",
+            closedImg: '../assets/images/projects/2.png',
+            link: "https://ampersands.itch.io/espere"
+        },
+        {
+            name: "Egg on a Wire",
+            closedImg: '../assets/images/projects/3.png',
+            link: "https://snoresnax.itch.io/egg-on-a-wire"
+        }, 
+        {
+            name: "Pen Pals",
+            closedImg: '../assets/images/projects/4.png',
+            link: "https://snoresnax.itch.io/pen-pals"
+        }, 
+        {
+            name: "Eternal Sanctuary",
+            closedImg: '../assets/images/projects/5.png',
+            link: "https://snoresnax.itch.io/eternal-sanctuary"
+        }, 
+        {
+            name: "Bottoms Up",
+            closedImg: '../assets/images/projects/6.png',
+            link: "https://snoresnax.itch.io/bottoms-up"
+        }, 
+        {
+            name: "fisherman",
+            closedImg: '../assets/images/projects/7.png',
+            link: "https://snoresnax.itch.io/fisherman"
+        }, 
+        {
+            name: "Mural",
+            closedImg: '../assets/images/projects/8.png',
+            link: "https://ampersands.itch.io/mural"
+        }, 
+        {
+            name: "Wingit",
+            closedImg: '../assets/images/projects/9.png',
+            link: "https://snoresnax.itch.io/wingit"
+        }, 
+        {
+            name: "aguas",
+            closedImg: '../assets/images/projects/10.png',
+            link: "https://ampersands.itch.io/aguas"
+        }, 
+        {
+            name: "bands",
+            closedImg: '../assets/images/projects/11.png',
+            link: "https://snoresnax.itch.io/bands"
         }, 
     ]
 

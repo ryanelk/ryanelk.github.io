@@ -95,62 +95,74 @@ export class Utils {
         {
             name: "Drop Dial",
             closedImg: '../assets/images/projects/0.png',
-            link: "https://shuixian.itch.io/drop-dial"
+            link: "https://shuixian.itch.io/drop-dial",
+            description: "Control a rotating, music-powered bar in a low-saturation cityscape. Made in Unity for UC Berkeley's Game Design DeCal, Spring 2018."
         },
         {
             name: "Summit Shake!",
             closedImg: '../assets/images/projects/1.png',
-            link: "https://ampersands.itch.io/summit-shake"
+            link: "https://ampersands.itch.io/summit-shake",
+            description: "Shake climbers off your sides as a sentient mountain. Made in PICO-8 for The Dream Arcade Archive, May 2020"
         },
         {
             name: "¡Esperé!",
             closedImg: '../assets/images/projects/2.png',
-            link: "https://ampersands.itch.io/espere"
+            link: "https://ampersands.itch.io/espere",
+            description: "Play as a street vendor serving up paletas on a hot, sunny day. Made in Unity for Hispanic Heritage Month Jam, Oct 2020"
         },
         {
             name: "Egg on a Wire",
             closedImg: '../assets/images/projects/3.png',
-            link: "https://snoresnax.itch.io/egg-on-a-wire"
+            link: "https://snoresnax.itch.io/egg-on-a-wire",
+            description: "Keep the egg safe from sparks by manipulating telephone wires. Made in Godot for Mini Jam 99, Feb 2022"
         }, 
         {
             name: "Pen Pals",
             closedImg: '../assets/images/projects/4.png',
-            link: "https://snoresnax.itch.io/pen-pals"
+            link: "https://snoresnax.itch.io/pen-pals",
+            description: "Guide letters to their destination or demise in branching narrative experience. Made in Godot for Black and White Jam 8, Apr 2022"
         }, 
         {
             name: "Eternal Sanctuary",
             closedImg: '../assets/images/projects/5.png',
-            link: "https://snoresnax.itch.io/eternal-sanctuary"
+            link: "https://snoresnax.itch.io/eternal-sanctuary",
+            description: "OST created for an imaginary game about runaways who seek refuge in an abandoned house. Made in Ableton for OST Composing Jam 4, Jul 2022" 
         }, 
         {
             name: "Bottoms Up",
             closedImg: '../assets/images/projects/6.png',
-            link: "https://snoresnax.itch.io/bottoms-up"
+            link: "https://snoresnax.itch.io/bottoms-up",
+            description: "Collaborate to recreate recipes in asymmetrical platformer. Made in Godot for Multiplayer Game Jam, Aug 2022"
         }, 
         {
             name: "fisherman",
             closedImg: '../assets/images/projects/7.png',
-            link: "https://snoresnax.itch.io/fisherman"
+            link: "https://snoresnax.itch.io/fisherman",
+            description: "Play a twisted game of fetch to capture lost spirits. Made in Godot for AI and Games Jam, Oct 2022"
         }, 
         {
             name: "Mural",
             closedImg: '../assets/images/projects/8.png',
-            link: "https://ampersands.itch.io/mural"
+            link: "https://ampersands.itch.io/mural",
+            description: "Rediscover a faded mural by repainting it. Made in Godot for Hispanic Heritage Month, Oct 2022"
         }, 
         {
             name: "Wingit",
             closedImg: '../assets/images/projects/9.png',
-            link: "https://snoresnax.itch.io/wingit"
+            link: "https://snoresnax.itch.io/wingit",
+            description: "Alter bad pick-up lines in revolutionary dating app. Made in Godot for Indiepocalypse Issue 42, May 2023"
         }, 
         {
             name: "aguas",
             closedImg: '../assets/images/projects/10.png',
-            link: "https://ampersands.itch.io/aguas"
+            link: "https://ampersands.itch.io/aguas",
+            description: "Escape from a jar of aguas frescas. Made in Godot for Con Latinidad, Oct 2023"
         }, 
         {
             name: "bands",
             closedImg: '../assets/images/projects/11.png',
-            link: "https://snoresnax.itch.io/bands"
+            link: "https://snoresnax.itch.io/bands",
+            description: "Zine investigating different manifestations of growth in life. Made in Procreate for Zine Jam: Growth Edition, Jan 2024"
         }, 
     ]
 

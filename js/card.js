@@ -5,7 +5,7 @@ const PI2 = Math.PI * 2;
 
 export class Card {
     constructor(x, y, w, h, project, ctx) {
-        this.closed = false
+        this.closed = true
         this.x = x
         this.y = y
         this.w = (this.closed) ? w : w * 2

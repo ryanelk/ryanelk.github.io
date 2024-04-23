@@ -25,12 +25,11 @@ class App {
         this.center_card_h = this.stageHeight / 3
 
         // get header/footer elements
-        this.volumeBtn = document.getElementById("volume_toggle")
+        this.volumeBtn = document.getElementById("volume-toggle")
         this.helpBtn = document.getElementById("help")
         this.backBtn = document.getElementById("arrow-back")
         this.forwardBtn = document.getElementById("arrow-forward")
         this.projectInfo = document.getElementById("project-info")
-
         
         // add font
         let f = new FontFace('Roboto-Regular', 'url(../assets/fonts/Roboto-Regular.ttf)');
@@ -107,6 +106,7 @@ class App {
                 Utils.cards[this.cardIdx],
                 this.ctx,
             )
+            // change visibility of buttons?
         }
     }
 
@@ -126,7 +126,7 @@ class App {
     }
 
     forward() {
-        if (!this.centerCard.animating) {
+        if (!this.centerCard.animating && this.cardIdx > 0) {
             this.cardIdx = Math.max(0, this.cardIdx - 1)
             this.checkDisabled()
             this.centerCard.project = Utils.cards[this.cardIdx]
@@ -137,7 +137,7 @@ class App {
     }
 
     back() {
-        if (!this.centerCard.animating) {
+        if (!this.centerCard.animating && this.cardIdx < Utils.cards.length - 1) {
             this.cardIdx = Math.min(Utils.cards.length - 1, this.cardIdx + 1)
             this.checkDisabled()
             this.centerCard.project = Utils.cards[this.cardIdx]

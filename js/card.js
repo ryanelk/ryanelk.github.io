@@ -5,7 +5,7 @@ const PI2 = Math.PI * 2;
 
 export class Card {
     constructor(x, y, w, h, project, ctx) {
-        this.closed = true
+        this.closed = false
         this.x = x
         this.y = y
         this.w = (this.closed) ? w : w * 2
@@ -23,6 +23,52 @@ export class Card {
 
         this.w_ = w
         this.h_ = w
+
+        // make html elements
+        this.projectTitle = document.createElement("div")
+        this.projectTitle.id = "project-title"
+        document.getElementById("polygon-div").appendChild(this.projectTitle)
+        this.projectTitle.classList.add("project-title")
+        this.projectTitle.innerHTML = this.project.name
+
+        this.projectDescription = document.createElement("div")
+        this.projectDescription.id = "project-description"
+        document.getElementById("polygon-div").appendChild(this.projectDescription)
+        this.projectDescription.classList.add("project-description")
+        this.projectDescription.innerHTML = this.project.description
+
+        this.projectExpand = document.createElement("span")
+        this.projectExpand.id = "project-expand"
+        document.getElementById("polygon-div").appendChild(this.projectExpand)
+        this.projectExpand.classList.add("material-symbols-outlined")
+        this.projectExpand.innerHTML = "expand_content"
+        this.projectExpand.style.position = "absolute"
+        this.projectExpand.addEventListener('click', this.onExpand.bind(this), false)
+
+        this.projectCollapse = document.createElement("span")
+        this.projectCollapse.id = "project-collapse"
+        document.getElementById("polygon-div").appendChild(this.projectCollapse)
+        this.projectCollapse.classList.add("material-symbols-outlined")
+        this.projectCollapse.innerHTML = "collapse_content"
+        this.projectCollapse.style.position = "absolute"
+        this.projectCollapse.addEventListener('click', this.onExpand.bind(this), false)
+
+        this.projectLink = document.createElement("span")
+        this.projectLink.id = "project-link"
+        document.getElementById("polygon-div").appendChild(this.projectLink)
+        this.projectLink.classList.add("material-symbols-outlined")
+        this.projectLink.innerHTML = "link"
+        this.projectLink.style.position = "absolute"
+        this.projectLink.addEventListener('click', this.onLink.bind(this), false)
+
+        // enable/disable elements
+        if (this.closed) {
+            this.projectCollapse.classList.add("disabled")
+        } else {
+            this.projectExpand.classList.add("disabled")
+        }
+        this.projectLink.classList.add("disabled")
+
 
         this.render()
     }
@@ -70,35 +116,56 @@ export class Card {
     }
 
     renderProjectTitle() {
-        this.ctx.strokeStyle = "#361D29"
-        this.ctx.fillStyle = "#361D29"
-        this.ctx.font = '48px Roboto-Regular';
-        this.ctx.textAlign = "center"
+        // this.ctx.strokeStyle = "#361D29"
+        // this.ctx.fillStyle = "#361D29"
+        // this.ctx.font = '48px Roboto-Regular';
+        // this.ctx.textAlign = "center"
+        if (!this.closed) {
+            this.projectTitle.style.visibility= "visible"
+            this.projectTitle.style.left = `${(this.x + this.w/5)}px`
+            this.projectTitle.style.top = `${this.y - this.h/6}px`
+            this.projectTitle.innerHTML = this.project.name
+        } else {
+            this.projectTitle.style.visibility= "hidden"
+        }
         // this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
     }
 
     renderProjectDescription() {
         // console.log("render project description")
         if (!this.closed) {
-            // render project description
-            // load font?
-            // size and format font?
+            this.projectDescription.style.visibility= "visible"
+            this.projectDescription.style.width = `${this.w_/1.5}px`
+            this.projectDescription.style.left = `${(this.x + this.w/12)}px`
+            this.projectDescription.style.top = `${this.y - this.h/20}px`
+            this.projectDescription.innerHTML = this.project.description
+        } else {
+            this.projectDescription.style.visibility= "hidden"
         }
     }
 
     renderProjectLink() {
         if (!this.closed) {
-            let x = this.x + (this.w/2 - this.w/8) + this.openXOffset/8
-            let y = this.y + (this.h/2 - this.h/8)
-            if (this.projectLink) {
-                // console.log([this.expandBtn.closed, this.closed])
-                this.projectLink.x = x
-                this.projectLink.y = y
-                this.projectLink.render()
-            } else {
-                // console.log("making a new button")
-                // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
-                this.projectLink = new Button(x, y, "link_", this.closed, "#C5B7B7", this.ctx) 
+            let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
+            let y = this.y + (this.h/2 - this.h/26)
+
+            this.projectLink.classList.remove("disabled")
+            this.projectLink.style.left = `${x}px`
+            this.projectLink.style.top = `${y}px`
+
+            // if (this.projectLink) {
+            //     // console.log([this.expandBtn.closed, this.closed])
+            //     this.projectLink.x = x
+            //     this.projectLink.y = y
+            //     this.projectLink.render()
+            // } else {
+            //     // console.log("making a new button")
+            //     // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
+            //     this.projectLink = new Button(x, y, "link_", this.closed, "#C5B7B7", this.ctx) 
+            // }
+        } else {
+            if (!this.projectLink.classList.contains("disabled")) {
+                this.projectLink.classList.add("disabled")
             }
         }
 
@@ -106,18 +173,36 @@ export class Card {
 
     renderExpandBtn() {
         // console.log("render expand button")
-        let x = this.x + (this.w/2 - this.w/26) + this.openXOffset/26
-        let y = this.y + (this.h/2 - this.h/26)
-        if (this.expandBtn && this.expandBtn.closed == this.closed) {
-            // console.log([this.expandBtn.closed, this.closed])
-            this.expandBtn.x = x
-            this.expandBtn.y = y
-            this.expandBtn.render()
+        let x = this.x + (this.w/2 - this.w/12) + this.openXOffset/12
+        let y = this.y + (this.h/2 + this.h/12)
+
+        // use buttons
+        if (this.closed) {
+            if (!this.projectCollapse.classList.contains("disabled")) {
+                this.projectCollapse.classList.add("disabled")
+            }
+            this.projectExpand.classList.remove("disabled")
+            this.projectExpand.style.left = `${x}px`
+            this.projectExpand.style.top = `${y}px`
         } else {
-            // console.log("making a new button")
-            // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
-            this.expandBtn = new Button(x, y, "expand_card_", this.closed, "#C5B7B7", this.ctx) 
+            if (!this.projectExpand.classList.contains("disabled")) {
+                this.projectExpand.classList.add("disabled")
+            }
+            this.projectCollapse.classList.remove("disabled")
+            this.projectCollapse.style.left = `${x}px`
+            this.projectCollapse.style.top = `${y}px`
         }
+
+        // if (this.expandBtn && this.expandBtn.closed == this.closed) {
+        //     // console.log([this.expandBtn.closed, this.closed])
+        //     this.expandBtn.x = x
+        //     this.expandBtn.y = y
+        //     this.expandBtn.render()
+        // } else {
+        //     // console.log("making a new button")
+        //     // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
+        //     this.expandBtn = new Button(x, y, "expand_card_", this.closed, "#C5B7B7", this.ctx) 
+        // }
     }
 
     renderDragIndicator() {
@@ -222,6 +307,14 @@ export class Card {
         this.renderOuterRectangle()
         this.renderInnerRectangle()
         this.renderInnerRectangle2()
+    }
+
+    onExpand(e) {
+        this.animate("expand", 0, 0)
+    }
+
+    onLink(e) {
+        window.open(this.project.link, "_blank").focus()
     }
 
     animate(action, mouseX, mouseY) {
@@ -368,7 +461,6 @@ export class Card {
     clearProject() {
         if (this.img || this.projectLink) {
             this.img = null
-            this.projectLink = null
         }
     }
 

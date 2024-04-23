@@ -121,6 +121,21 @@
     font-size: x-large;
   }
 
+  .project-title {
+    font-size: x-large;
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .project-description {
+    position: absolute;
+    font-size: x-large;
+    text-align: center;
+  }
+
+  
+
   .disabled {
     visibility: hidden;
   }

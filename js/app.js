@@ -151,16 +151,9 @@ class App {
         // set down in card?
         if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard)) {
             // determine if this is an interaction or a drag
-            if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.expandBtn)) {
-                this.centerCard.animate("expand", e.offsetX, e.offsetY)
-            } else if (Utils.in_bounds(e.offsetX, e.offsetY, this.centerCard.projectLink)) {
-                // take user to link
-                window.open(this.centerCard.project.link, "_blank").focus()
-            } else {
-                this.isDown = true
-                this.lastX = e.offsetX
-                this.lastY = e.offsetY
-            }
+            this.isDown = true
+            this.lastX = e.offsetX
+            this.lastY = e.offsetY
         }
         // interactable button that intercepts input to open up card
         // otherwise begin drag

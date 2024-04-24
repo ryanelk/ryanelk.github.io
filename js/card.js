@@ -102,11 +102,15 @@ export class Card {
 
             // when image is loaded, position relative to parent
             this.img.onload = () => {
+                console.log(`image loaded with ${this.img.width}x${this.img.height}`)
                 if (this.w > this.img.width && this.h > this.img.height) {
                     x = this.x - this.img.width/2  - this.openXOffset/2
                     y = this.y - this.img.height/2 
                     this.ctx.drawImage(this.img, x, y)
                 }
+            }
+            this.img.onerror = () => {
+                console.log("error loading project image")
             }
             // use path from given project
             this.img.src = this.project.closedImg
@@ -317,8 +321,8 @@ export class Card {
 
     animate(action, mouseX, mouseY) {
         // prevent other animations from occurring if animating
-        console.log("animate")
-        console.log([action, mouseX, mouseY])
+        // console.log("animate")
+        // console.log([action, mouseX, mouseY])
         switch (action) {
             case "expand":
                 if (!this.animating) {
@@ -327,7 +331,13 @@ export class Card {
                     this.zero = document.timeline.currentTime
                     this.w_old = this.w
                     // use bound animation
-                    this.closed ? requestAnimationFrame(this.openCard.bind(this)) : requestAnimationFrame(this.closeCard.bind(this))
+                    if (this.closed) {
+                        this.closed = !this.closed
+                        requestAnimationFrame(this.openCard.bind(this))
+                    } else {
+                        this.closed = !this.closed
+                        requestAnimationFrame(this.closeCard.bind(this))
+                    }  
                 }
                 break
             case "drag":
@@ -384,7 +394,6 @@ export class Card {
         // console.log([ts, this.zero, this.w_old])
         // determine interpolation style
         let v = (ts - this.zero) / this.openDuration
-        this.closed = false
         // interpolate values from 0-1
         if (v < 1) {
             // set values with v
@@ -409,7 +418,6 @@ export class Card {
         // console.log([ts, this.zero, this.w_old])
         // determine interpolation style
         let v = (ts - this.zero) / this.closeDuration
-        this.closed = true
         // interpolate values from 0-1
         if (v < 1) {
             // set values with v
@@ -442,12 +450,12 @@ export class Card {
             this.render()
             requestAnimationFrame((t) => this.flipVertical(t))
         } else if (v < 1) {
-            this.clearProject()
             // load next project if necessary
             this.h = Math.floor(Utils.lerp(0, this.h_old, Utils.mapRange(v, 0.5, 1, 0, 1), "easeout"))
             this.render()
             requestAnimationFrame((t) => this.flipVertical(t))
         } else {
+            this.clearProject()
             console.log("animation done")
             this.h = Math.floor(Utils.lerp(0, this.h_old, 1, "easeout"))
             this.render()
@@ -457,7 +465,8 @@ export class Card {
     }
 
     clearProject() {
-        if (this.img || this.projectLink) {
+        console.log(this.img)
+        if (this.img) {
             this.img = null
         }
     }

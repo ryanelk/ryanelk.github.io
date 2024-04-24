@@ -64,6 +64,7 @@
     margin-left: auto;
     padding-right: $spacing-unit-padded;
     padding-left: $spacing-unit-padded;
+    min-width: 300px;
     
     @include media-query($on-laptop) {
       max-width: -webkit-calc(#{$content-width-padded} - (#{$spacing-unit-padded}));
@@ -76,10 +77,31 @@
 /**
  * spacing styles
  */
- .evenly-spaced {
+ .evenly-spaced-container {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+ }
+
+ .evenly-spaced-right {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+    justify-content: right;
+    margin-right: 0;
+    span {
+      margin-inline: 15px;
+    }
+  }
+
+  .evenly-spaced-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    margin-left: 0;
     span {
       margin-inline: 15px;
     }
@@ -118,6 +140,10 @@
   }
 
   .project-info {
+    font-size: x-large;
+  }
+
+  .name {
     font-size: x-large;
   }
 

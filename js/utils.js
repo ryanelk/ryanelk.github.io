@@ -148,7 +148,7 @@ export class Utils {
         }, 
         {
             name: "Wingit",
-            closedImg: '/assets/images/projects/9.png',
+            closedImg: `${window.location.origin}/assets/images/projects/9.png`,
             link: "https://snoresnax.itch.io/wingit",
             description: "Alter bad pick-up lines in revolutionary dating app. Made in Godot for Indiepocalypse Issue 42, May 2023"
         }, 
@@ -160,7 +160,7 @@ export class Utils {
         }, 
         {
             name: "bands",
-            closedImg: '..//assets//images//projects//11.png',
+            closedImg: `${window.location.origin}/assets/images/projects/11.png`,
             link: "https://snoresnax.itch.io/bands",
             description: "Zine investigating different manifestations of growth in life. Made in Procreate for Zine Jam: Growth Edition, Jan 2024"
         }, 

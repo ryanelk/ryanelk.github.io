@@ -1,5 +1,3 @@
-import { Rectangle } from "./rectangle.js"
-import { Button } from "./button.js"
 import { Utils } from "./utils.js"
 const PI2 = Math.PI * 2;
 

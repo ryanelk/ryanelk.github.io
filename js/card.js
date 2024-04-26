@@ -1,74 +1,91 @@
 import { Utils } from "./utils.js"
 const PI2 = Math.PI * 2;
 
+let cl = console.log
+
 export class Card {
-    constructor(x, y, w, h, project, ctx) {
-        this.closed = true
-        this.x = x
-        this.y = y
-        this.w = (this.closed) ? w : w * 2
-        this.h = h
-        this.project = project 
-        this.ctx = ctx
+    constructor(obj) {
+        cl(obj)
+        this.init(obj)
+        this.render()
+    }
+
+    init(obj) {
+        this.initProps(obj)
+        this.initPos(obj)
+        this.initHtml(obj)
+    }
+
+    initProps(obj) {
+        this.closed = obj.closed
+        this.project = obj.project
+        this.ctx = obj.ctx
         this.openDuration = 400
         this.closeDuration = 400
         this.returnDuration = 400
         this.flipDuration = 400
         this.zero = document.timeline.currentTime
         this.rendering = false
-        this.openXDist = w
+    }
+
+    initPos(obj) {
+        this.x = obj.x
+        this.y = obj.y
+        this.w = (this.closed) ? obj.w : obj.w * 2
+        this.h = obj.h
+        this.openXDist = obj.w
         this.openXOffset = (this.closed) ? 0 : this.openXDist
+        this.w_ = obj.w
+        this.h_ = obj.h
+    }
 
-        this.w_ = w
-        this.h_ = w
-
-        // make html elements
+    initHtml(obj) {
         this.projectTitle = document.createElement("div")
+        this.projectTitle.classList.add("project-title")
         this.projectTitle.id = "project-title"
         document.getElementById("polygon-div").appendChild(this.projectTitle)
-        this.projectTitle.classList.add("project-title")
-        this.projectTitle.innerHTML = this.project.name
+        this.projectTitle.style.visibility= "hidden"
+        this.projectTitle.innerHTML = obj.project.name
 
         this.projectDescription = document.createElement("div")
+        this.projectDescription.classList.add("project-description")
         this.projectDescription.id = "project-description"
         document.getElementById("polygon-div").appendChild(this.projectDescription)
-        this.projectDescription.classList.add("project-description")
-        this.projectDescription.innerHTML = this.project.description
+        this.projectDescription.style.visibility= "hidden"
+        this.projectDescription.innerHTML = obj.project.description
 
         this.projectExpand = document.createElement("span")
+        this.projectExpand.classList.add("material-symbols-outlined")
+        this.projectExpand.classList.add("disabled-canvas")
+        this.projectExpand.style.position = "absolute"
         this.projectExpand.id = "project-expand"
         document.getElementById("polygon-div").appendChild(this.projectExpand)
-        this.projectExpand.classList.add("material-symbols-outlined")
         this.projectExpand.innerHTML = "expand_content"
-        this.projectExpand.style.position = "absolute"
         this.projectExpand.addEventListener('click', this.onExpand.bind(this), false)
 
         this.projectCollapse = document.createElement("span")
+        this.projectCollapse.classList.add("material-symbols-outlined")
+        this.projectCollapse.classList.add("disabled-canvas")
+        this.projectCollapse.style.position = "absolute"
         this.projectCollapse.id = "project-collapse"
         document.getElementById("polygon-div").appendChild(this.projectCollapse)
-        this.projectCollapse.classList.add("material-symbols-outlined")
         this.projectCollapse.innerHTML = "collapse_content"
-        this.projectCollapse.style.position = "absolute"
         this.projectCollapse.addEventListener('click', this.onExpand.bind(this), false)
 
         this.projectLink = document.createElement("span")
+        this.projectLink.classList.add("material-symbols-outlined")
+        this.projectLink.classList.add("disabled-canvas")
+        this.projectLink.style.position = "absolute"
         this.projectLink.id = "project-link"
         document.getElementById("polygon-div").appendChild(this.projectLink)
-        this.projectLink.classList.add("material-symbols-outlined")
         this.projectLink.innerHTML = "link"
-        this.projectLink.style.position = "absolute"
         this.projectLink.addEventListener('click', this.onLink.bind(this), false)
 
-        // enable/disable elements
-        if (this.closed) {
-            this.projectCollapse.classList.add("disabled")
-        } else {
-            this.projectExpand.classList.add("disabled")
-        }
-        this.projectLink.classList.add("disabled")
-
-
-        this.render()
+        this.projectImg = document.createElement("img")
+        this.projectImg.style.position = "absolute"
+        this.projectImg.id = "project-img"
+        document.getElementById("polygon-div").appendChild(this.projectImg)
+        // this.projectImg.src = obj.project.closedImg
     }
 
     // load info
@@ -79,42 +96,40 @@ export class Card {
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
             this.renderBackground()
             this.renderProject()
+            this.renderTest()
             this.rendering = false
         }
     }
 
+    renderTest() {
+        // console.log("render inner rect")
+        this.ctx.save();
+        this.ctx.beginPath();
+        let w = 1
+        let h = 1
+        let x = this.x + (this.openXOffset/2)
+        let y = this.y
+        this.ctx.strokeStyle = "#010000"
+        this.ctx.fillStyle = "#010000"
+        this.ctx.rect(x, y, w, h)
+        this.ctx.stroke()
+        this.ctx.fill() 
+        this.ctx.closePath();
+        this.ctx.restore()
+    }
+
     renderProjectImage() {
         // console.log("render project image")
-        let x
-        let y
+        // this.projectImg.src = "/assets/images/dot.png"
+        this.projectImg.src = this.project.closedImg
 
-        // redraw image
-        if (this.img) {
-            if (this.w > this.img.width && this.h > this.img.height) {
-            // console.log("openx: " + this.openXOffset/2)
-                x = this.x - this.img.width/2 - this.openXOffset/2
-                y = this.y - this.img.height/2 
-                this.ctx.drawImage(this.img, x, y)
-            }
-        } else {
-            this.img = new Image();
-            // this.img.className = 'polygon-img'
+        // let x = this.x - this.openXOffset/2
+        let x = this.x - this.projectImg.width/2 - this.openXOffset/2
+        // let y = this.y + document.getElementById("site-header").clientHeight
+        let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight
 
-            // when image is loaded, position relative to parent
-            this.img.onload = () => {
-                console.log(`image loaded with ${this.img.width}x${this.img.height}`)
-                if (this.w > this.img.width && this.h > this.img.height) {
-                    x = this.x - this.img.width/2  - this.openXOffset/2
-                    y = this.y - this.img.height/2 
-                    this.ctx.drawImage(this.img, x, y)
-                }
-            }
-            this.img.onerror = () => {
-                console.log("error loading project image")
-            }
-            // use path from given project
-            this.img.src = this.project.closedImg
-        }
+        this.projectImg.style.left = `${x}px`
+        this.projectImg.style.top = `${y}px`
     }
 
     renderProjectTitle() {
@@ -122,6 +137,8 @@ export class Card {
         // this.ctx.fillStyle = "#361D29"
         // this.ctx.font = '48px Roboto-Regular';
         // this.ctx.textAlign = "center"
+        // this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
+
         if (!this.closed) {
             this.projectTitle.style.visibility= "visible"
             this.projectTitle.style.left = `${(this.x + this.w/5)}px`
@@ -130,7 +147,6 @@ export class Card {
         } else {
             this.projectTitle.style.visibility= "hidden"
         }
-        // this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
     }
 
     renderProjectDescription() {
@@ -151,23 +167,12 @@ export class Card {
             let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
             let y = this.y + (this.h/2 - this.h/26)
 
-            this.projectLink.classList.remove("disabled")
+            this.projectLink.classList.remove("disabled-canvas")
             this.projectLink.style.left = `${x}px`
             this.projectLink.style.top = `${y}px`
-
-            // if (this.projectLink) {
-            //     // console.log([this.expandBtn.closed, this.closed])
-            //     this.projectLink.x = x
-            //     this.projectLink.y = y
-            //     this.projectLink.render()
-            // } else {
-            //     // console.log("making a new button")
-            //     // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
-            //     this.projectLink = new Button(x, y, "link_", this.closed, "#C5B7B7", this.ctx) 
-            // }
         } else {
-            if (!this.projectLink.classList.contains("disabled")) {
-                this.projectLink.classList.add("disabled")
+            if (!this.projectLink.classList.contains("disabled-canvas")) {
+                this.projectLink.classList.add("disabled-canvas")
             }
         }
 
@@ -180,31 +185,20 @@ export class Card {
 
         // use buttons
         if (this.closed) {
-            if (!this.projectCollapse.classList.contains("disabled")) {
-                this.projectCollapse.classList.add("disabled")
+            if (!this.projectCollapse.classList.contains("disabled-canvas")) {
+                this.projectCollapse.classList.add("disabled-canvas")
             }
-            this.projectExpand.classList.remove("disabled")
+            this.projectExpand.classList.remove("disabled-canvas")
             this.projectExpand.style.left = `${x}px`
             this.projectExpand.style.top = `${y}px`
         } else {
-            if (!this.projectExpand.classList.contains("disabled")) {
-                this.projectExpand.classList.add("disabled")
+            if (!this.projectExpand.classList.contains("disabled-canvas")) {
+                this.projectExpand.classList.add("disabled-canvas")
             }
-            this.projectCollapse.classList.remove("disabled")
+            this.projectCollapse.classList.remove("disabled-canvas")
             this.projectCollapse.style.left = `${x}px`
             this.projectCollapse.style.top = `${y}px`
         }
-
-        // if (this.expandBtn && this.expandBtn.closed == this.closed) {
-        //     // console.log([this.expandBtn.closed, this.closed])
-        //     this.expandBtn.x = x
-        //     this.expandBtn.y = y
-        //     this.expandBtn.render()
-        // } else {
-        //     // console.log("making a new button")
-        //     // console.log([this.expandBtn ? this.expandBtn.closed : "IDK", this.closed])
-        //     this.expandBtn = new Button(x, y, "expand_card_", this.closed, "#C5B7B7", this.ctx) 
-        // }
     }
 
     renderDragIndicator() {

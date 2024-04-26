@@ -166,6 +166,11 @@
     visibility: hidden;
   }
 
+  .disabled-canvas {
+    visibility: hidden;
+    display: none !important;
+  }
+
  .menu-symbol {
     display: inline-block;
   }

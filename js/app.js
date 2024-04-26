@@ -2,27 +2,18 @@ import { Card } from "./card.js"
 import { Rectangle } from "./rectangle.js"
 import { Utils } from "./utils.js"
 
+let cl = console.log
+
 class App {
 
     constructor() {
         this.canvas = document.createElement('canvas')
-        this.canvas.height  = this.canvas.offsetHeight;
         this.canvas.id = "polygon-canvas"
         document.getElementById("polygon-div").appendChild(this.canvas)
         this.ctx = this.canvas.getContext('2d')
-        this.stageHeight = document.getElementById("polygon-canvas").getBoundingClientRect().height
-        this.stageWidth = document.body.clientWidth;
 
-        window.addEventListener('resize', this.render.bind(this), false);
-        
         this.isDown = false
         this.cardIdx = Utils.cards.length - 1
-
-        // center card
-        this.center_card_x = this.stageWidth / 2
-        this.center_card_y = this.stageHeight / 2
-        this.center_card_w = this.stageWidth / 4
-        this.center_card_h = this.stageHeight / 3
 
         // get header/footer elements
         this.volumeBtn = document.getElementById("volume-toggle")
@@ -32,14 +23,14 @@ class App {
         this.projectInfo = document.getElementById("project-info")
         
         // add font
-        let f = new FontFace('Roboto-Regular', 'url(../assets/fonts/Roboto-Regular.ttf)');
-        f.load().then((font) => {
-            // Ready to use the font in a canvas context
-            console.log('font ready');
-            // Add font on the html page
-            document.fonts.add(font);
-            this.render()
-        });
+        // let f = new FontFace('Roboto-Regular', 'url(../assets/fonts/Roboto-Regular.ttf)');
+        // f.load().then((font) => {
+        //     // Ready to use the font in a canvas context
+        //     console.log('font ready');
+        //     // Add font on the html page
+        //     document.fonts.add(font);
+        //     this.render()
+        // });
 
         // disable/hide elements that shouldn't be active
         this.backBtn.classList.add("disabled")
@@ -47,6 +38,8 @@ class App {
 
         // add info
         this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name
+
+        window.addEventListener('resize', this.render.bind(this), false);
 
         document.addEventListener('pointerdown', this.onDown.bind(this), false);
         document.addEventListener('pointermove', this.onMove.bind(this), false);
@@ -75,36 +68,49 @@ class App {
             }
         })
 
-        // document.getElementById('polygon-replay').addEventListener('click', this.onReplay.bind(this), false);
-        // document.getElementById('polygon-add').addEventListener('click', this.onOpen.bind(this), false);
-        // document.getElementById('polygon-remove').addEventListener('click', this.onClose.bind(this), false);
-
         document.getElementById('arrow-back').addEventListener('click', this.onBack.bind(this), false);
         document.getElementById('project-info').addEventListener('click', this.onExpand.bind(this), false);
         document.getElementById('arrow-forward').addEventListener('click', this.onForward.bind(this), false);
-
-        window.requestAnimationFrame(this.animate.bind(this));
-        
+        cl([this.canvas.scrollWidth, this.canvas.scrollHeight, this.canvas.clientWidth, this.canvas.clientHeight, this.canvas.offsetWidth, this.canvas.offsetHeight])
         this.render();
     }
 
     render() { 
-        this.canvas.width = this.stageWidth
-        this.canvas.height = this.stageHeight
+        // cl([this.canvas.scrollWidth, this.canvas.scrollHeight, this.canvas.clientWidth, this.canvas.clientHeight, this.canvas.offsetWidth, this.canvas.offsetHeight])
+        let canvasHeight = document.body.clientHeight - (document.getElementById("site-header").clientHeight + document.getElementById("site-footer").clientHeight)
+        // cl([this.canvas.height, canvasHeight, document.body.clientHeight, window.innerHeight])
+        this.canvas.height = canvasHeight - 18
+        cl(this.canvas.height)
+        // this.canvas.height = this.canvas.scrollHeight
+        this.canvas.width = this.canvas.clientWidth
+        // this.canvas.height = this.canvas.clientHeight
+        
+        this.center_card_x = this.canvas.clientWidth / 2
+        this.center_card_y = this.canvas.clientHeight / 2
+        this.center_card_w = this.canvas.clientWidth / 4
+        this.center_card_h = this.canvas.clientHeight / 3
         // re-render center card
         if (this.centerCard) {
             // console.log("rerendering card")
             // rerender project info and arrows
+            this.centerCard.initPos({
+                x: this.center_card_x,
+                y: this.center_card_y,
+                w: this.center_card_w,
+                h: this.center_card_h,
+            })
             this.centerCard.render()
         } else {
-            // console.log("creating new card")
-            this.centerCard = new Card(
-                this.center_card_x,
-                this.center_card_y,
-                this.center_card_w,
-                this.center_card_h,
-                Utils.cards[this.cardIdx],
-                this.ctx,
+            console.log("creating new card")
+            this.centerCard = new Card({
+                x: this.center_card_x,
+                y: this.center_card_y,
+                w: this.center_card_w,
+                h: this.center_card_h,
+                project: Utils.cards[this.cardIdx],
+                ctx: this.ctx,
+                closed: true,
+            }
             )
             // change visibility of buttons?
         }
@@ -200,10 +206,6 @@ class App {
 
     onForward(e) {
         this.forward()
-    }
-
-    animate() {
-        window.requestAnimationFrame(this.animate.bind(this));
     }
 
 }

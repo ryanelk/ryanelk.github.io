@@ -1,11 +1,13 @@
 const PI2 = Math.PI * 2;
+let cl = console.log
 
 export class Utils {
 
     static in_bounds(mouseX, mouseY, element=this) {
+        cl(element)
         let x = element.x - element.w/2
         let y = element.y - element.h/2
-        // console.log(["hello", mouseX, mouseY, [x, x+element.w], [y, y + element.h], element, mouseX > x, mouseX < (x + element.w), mouseY > y, mouseY < (y + element.h)])
+        console.log(["hello", mouseX, mouseY, [x, x+element.w], [y, y + element.h], element, mouseX > x, mouseX < (x + element.w), mouseY > y, mouseY < (y + element.h)])
         // check if mouse is within bounds of element (renders from center)
         
         return (mouseX > x && mouseX < (x + element.w)) && (mouseY > y && mouseY < (y + element.h))
@@ -17,6 +19,7 @@ export class Utils {
         // do interpolation to make smoother?
         element.x -= offsetX
         element.y -= offsetY
+        element.render()
     }
 
     static move(mouseX, mouseY, element=this) {

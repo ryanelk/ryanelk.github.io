@@ -5,7 +5,7 @@ let cl = console.log
 
 export class Card {
     constructor(obj) {
-        cl(obj)
+        cl("constructing")
         this.init(obj)
         this.render()
     }
@@ -29,6 +29,7 @@ export class Card {
     }
 
     initPos(obj) {
+        // cl("initPos")
         this.x = obj.x
         this.y = obj.y
         this.w = (this.closed) ? obj.w : obj.w * 2
@@ -90,13 +91,13 @@ export class Card {
 
     // load info
     render() {
-        // console.log("rendering")
         if (!this.rendering) {
+            console.log("rendering")
             this.rendering = true
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
             this.renderBackground()
             this.renderProject()
-            this.renderTest()
+            // this.renderTest()
             this.rendering = false
         }
     }
@@ -121,12 +122,13 @@ export class Card {
     renderProjectImage() {
         // console.log("render project image")
         // this.projectImg.src = "/assets/images/dot.png"
+            // let x = this.x - this.openXOffset/2
         this.projectImg.src = this.project.closedImg
 
-        // let x = this.x - this.openXOffset/2
         let x = this.x - this.projectImg.width/2 - this.openXOffset/2
         // let y = this.y + document.getElementById("site-header").clientHeight
-        let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight
+        let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight + 18/2
+        // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
 
         this.projectImg.style.left = `${x}px`
         this.projectImg.style.top = `${y}px`
@@ -362,7 +364,7 @@ export class Card {
                 break
             case "hover":
                 // console.log("hover")
-                this.hover(mouseX, mouseY, this)
+                // this.hover(mouseX, mouseY, this)
                 break
             case "exit":
                 // move to offscreen point?
@@ -463,6 +465,11 @@ export class Card {
         if (this.img) {
             this.img = null
         }
+    }
+
+    drag(x, y) {
+        this.x -= x
+        this.y -= y
     }
 
     move(ts) {

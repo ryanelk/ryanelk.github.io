@@ -31,7 +31,8 @@ header_pages:
 
 # Set to `true` to show excerpts on the homepage.
 #show_excerpts: false
-baseurl: /ryanelk.github.io
+baseurl:
+# baseurl: /ryanelk.github.io
 
 # Minima specific settings, which are only available from Minima 3.0 onward.
 minima:

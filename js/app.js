@@ -21,6 +21,9 @@ class App {
         this.backBtn = document.getElementById("arrow-back")
         this.forwardBtn = document.getElementById("arrow-forward")
         this.projectInfo = document.getElementById("project-info")
+
+        // bio
+        // this.initBio()
         
         // add font
         // let f = new FontFace('Roboto-Regular', 'url(../assets/fonts/Roboto-Regular.ttf)');
@@ -74,6 +77,16 @@ class App {
         // cl([this.canvas.scrollWidth, this.canvas.scrollHeight, this.canvas.clientWidth, this.canvas.clientHeight, this.canvas.offsetWidth, this.canvas.offsetHeight])
         window.requestAnimationFrame(this.render.bind(this));
         this.render()
+    }
+
+    initBio() {
+        // create html for bio
+        this.projectTitle = document.createElement("div")
+        this.projectTitle.classList.add("bio")
+        this.projectTitle.id = "bio"
+        document.getElementById("polygon-div").appendChild(this.projectTitle)
+        this.projectTitle.innerHTML = Utils.bio
+        // create button for enabling
     }
 
     resize() {

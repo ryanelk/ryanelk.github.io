@@ -90,9 +90,15 @@ export class Utils {
         return from + (to - from) * t
     }
 
+    static animateProperty(ts, element, property, duration, interpolation) {
+
+    }
+
     static mapRange(v, start_0, end_0, start_1, end_1) {
         return (v - start_0) / (end_0 - start_0) * (end_1 - start_1) + start_1
     }
+
+    static bio = "I am a product development engineer with a background in computer science. \nI push for accessibility and innovation in my work, and make sure that intention is clear in the end product.\nIn my free time, I love to experiment with game design and development as part of a multimedia collective."
 
     static cards = [
         {

@@ -46,6 +46,7 @@ export class Card {
         this.projectTitle.id = "project-title"
         document.getElementById("polygon-div").appendChild(this.projectTitle)
         this.projectTitle.style.visibility= "hidden"
+        this.projectTitle.style.fontSize = "1.7vh"
         this.projectTitle.innerHTML = obj.project.name
 
         this.projectDescription = document.createElement("div")
@@ -53,12 +54,14 @@ export class Card {
         this.projectDescription.id = "project-description"
         document.getElementById("polygon-div").appendChild(this.projectDescription)
         this.projectDescription.style.visibility= "hidden"
+        this.projectDescription.style.fontSize = "1.7vmin"
         this.projectDescription.innerHTML = obj.project.description
 
         this.projectExpand = document.createElement("span")
         this.projectExpand.classList.add("material-symbols-outlined")
         this.projectExpand.classList.add("disabled-canvas")
         this.projectExpand.style.position = "absolute"
+        this.projectExpand.style.fontSize = "1.7vh"
         this.projectExpand.id = "project-expand"
         document.getElementById("polygon-div").appendChild(this.projectExpand)
         this.projectExpand.innerHTML = "expand_content"
@@ -77,6 +80,7 @@ export class Card {
         this.projectLink.classList.add("material-symbols-outlined")
         this.projectLink.classList.add("disabled-canvas")
         this.projectLink.style.position = "absolute"
+        this.projectLink.style.fontSize = "1.7vh"
         this.projectLink.id = "project-link"
         document.getElementById("polygon-div").appendChild(this.projectLink)
         this.projectLink.innerHTML = "link"
@@ -84,6 +88,7 @@ export class Card {
 
         this.projectImg = document.createElement("img")
         this.projectImg.style.position = "absolute"
+        this.projectImg.style.height = "20vmin"
         this.projectImg.id = "project-img"
         document.getElementById("polygon-div").appendChild(this.projectImg)
         // this.projectImg.src = obj.project.closedImg
@@ -143,7 +148,7 @@ export class Card {
 
         if (!this.closed) {
             this.projectTitle.style.visibility= "visible"
-            this.projectTitle.style.left = `${(this.x + this.w/5)}px`
+            this.projectTitle.style.left = `${(this.x + this.w/4)}px`
             this.projectTitle.style.top = `${this.y - this.h/6}px`
             this.projectTitle.innerHTML = this.project.name
         } else {
@@ -156,8 +161,8 @@ export class Card {
         if (!this.closed) {
             this.projectDescription.style.visibility= "visible"
             this.projectDescription.style.width = `${this.w_/1.5}px`
-            this.projectDescription.style.left = `${(this.x + this.w/12)}px`
-            this.projectDescription.style.top = `${this.y - this.h/20}px`
+            this.projectDescription.style.left = `${(this.x + this.w/4)}px`
+            this.projectDescription.style.top = `${this.y - this.h/18}px`
             this.projectDescription.innerHTML = this.project.description
         } else {
             this.projectDescription.style.visibility= "hidden"

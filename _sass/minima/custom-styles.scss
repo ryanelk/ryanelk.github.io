@@ -148,16 +148,20 @@
   }
 
   .project-title {
-    font-size: x-large;
     position: absolute;
     text-align: center;
     font-weight: bold;
+    left:50%;
+    margin-right: -50%;
+    transform: translateX(-50%);
   }
 
   .project-description {
     position: absolute;
-    font-size: x-large;
     text-align: center;
+    left:50%;
+    margin-right: -50%;
+    transform: translateX(-50%);
   }
 
   

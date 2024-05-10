@@ -64,6 +64,9 @@
     margin-left: auto;
     padding-right: $spacing-unit-padded;
     padding-left: $spacing-unit-padded;
+    flex-basis: 0;
+    flex-grow: 1;
+    min-width: 0;
     
     @include media-query($on-laptop) {
       max-width: -webkit-calc(#{$content-width-padded} - (#{$spacing-unit-padded}));

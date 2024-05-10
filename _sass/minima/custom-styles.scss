@@ -64,7 +64,6 @@
     margin-left: auto;
     padding-right: $spacing-unit-padded;
     padding-left: $spacing-unit-padded;
-    min-width: 300px;
     
     @include media-query($on-laptop) {
       max-width: -webkit-calc(#{$content-width-padded} - (#{$spacing-unit-padded}));

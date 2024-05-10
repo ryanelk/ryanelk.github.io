@@ -134,9 +134,11 @@ export class Card {
         // let y = this.y + document.getElementById("site-header").clientHeight
         let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight + 18/2
         // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
-
-        this.projectImg.style.left = `${x}px`
-        this.projectImg.style.top = `${y}px`
+        cl([this.x, x, this.projectImg.width/2 - this.openXOffset/2])
+        if (x && y) {
+            this.projectImg.style.left = `${x}px`
+            this.projectImg.style.top = `${y}px`
+        }
     }
 
     renderProjectTitle() {

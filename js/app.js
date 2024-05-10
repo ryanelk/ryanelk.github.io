@@ -100,7 +100,7 @@ class App {
         let new_w = this.canvas.clientWidth / 4
         let new_h = this.canvas.clientHeight / 3
         if (this.centerCard && (this.center_card_x != new_x || this.center_card_y != new_y || this.center_card_w != new_w || this.center_card_h != new_h)) {
-            console.log("rerendering card")
+            // console.log("rerendering card")
             // rerender project info and arrows
             this.center_card_x = new_x
             this.center_card_y = new_y
@@ -118,8 +118,6 @@ class App {
     render() { 
         // cl([this.canvas.scrollWidth, this.canvas.scrollHeight, this.canvas.clientWidth, this.canvas.clientHeight, this.canvas.offsetWidth, this.canvas.offsetHeight])
         // cl([this.canvas.height, canvasHeight, document.body.clientHeight, window.innerHeight])
-        // this.canvas.height = this.canvas.scrollHeight
-        // this.canvas.height = this.canvas.clientHeight
         let changed = false
         let canvasHeight = document.body.clientHeight - (document.getElementById("site-header").clientHeight + document.getElementById("site-footer").clientHeight)
         if (canvasHeight != this.canvas.height || this.canvas.width != this.canvas.clientWidth) {
@@ -133,7 +131,7 @@ class App {
         this.center_card_w = this.canvas.width / 4
         this.center_card_h = this.canvas.height / 3
         if (this.centerCard) {
-            console.log("rerendering card")
+            // console.log("rerendering card")
             // rerender project info and arrows
             if (changed) {
                 this.centerCard.initPos({
@@ -152,8 +150,9 @@ class App {
                 w: this.center_card_w,
                 h: this.center_card_h,
                 project: Utils.cards[this.cardIdx],
+                cardIdx: this.cardIdx,
                 ctx: this.ctx,
-                closed: true,
+                closed: false,
             })
             // change visibility of buttons?
         }
@@ -178,9 +177,8 @@ class App {
         if (!this.centerCard.animating && this.cardIdx > 0) {
             this.cardIdx = Math.max(0, this.cardIdx - 1)
             this.checkDisabled()
-            this.centerCard.project = Utils.cards[this.cardIdx]
+            this.centerCard.cardIdx = this.cardIdx
             this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name
-            console.log(this.centerCard.project)
             this.centerCard.animate("flipVertical", 0, 0)
         }
     }
@@ -189,9 +187,8 @@ class App {
         if (!this.centerCard.animating && this.cardIdx < Utils.cards.length - 1) {
             this.cardIdx = Math.min(Utils.cards.length - 1, this.cardIdx + 1)
             this.checkDisabled()
-            this.centerCard.project = Utils.cards[this.cardIdx]
+            this.centerCard.cardIdx = this.cardIdx
             this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name
-            console.log(this.centerCard.project)
             this.centerCard.animate("flipVertical", 0, 0)
         }
     }

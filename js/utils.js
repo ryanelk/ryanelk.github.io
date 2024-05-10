@@ -78,10 +78,10 @@ export class Utils {
                 t = this.easeout(t)
                 break
             case "easeinx2":
-                t = this.easein(t)
+                t = this.easeinx2(t)
                 break
             case "easeoutx2":
-                t = this.easeout(t)
+                t = this.easeoutx2(t)
                 break
             case "spike":
                 t = this.spike(t)
@@ -90,8 +90,12 @@ export class Utils {
         return from + (to - from) * t
     }
 
-    static animateProperty(v, element, property, start, end, interpolation) {
-        element[property] = Math.floor(Utils.lerp(start, end, v, interpolation))
+    static animateProperty(v, element, property, start, end, interpolation, unit="") {
+        if (unit != "") {
+            element[property] = `${Math.floor(Utils.lerp(start, end, v, interpolation))+unit}`
+        } else {
+            element[property] = Math.floor(Utils.lerp(start, end, v, interpolation))
+        }
     }
 
     static mapRange(v, start_0, end_0, start_1, end_1) {

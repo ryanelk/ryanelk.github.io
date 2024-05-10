@@ -19,6 +19,7 @@ export class Card {
     initProps(obj) {
         this.closed = obj.closed
         this.project = obj.project
+        this.cardIdx = obj.cardIdx
         this.ctx = obj.ctx
         this.openDuration = 400
         this.closeDuration = 400
@@ -97,7 +98,7 @@ export class Card {
     // load info
     render() {
         if (!this.rendering) {
-            console.log("rendering")
+            // console.log("rendering")
             this.rendering = true
             this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
             this.renderBackground()
@@ -424,14 +425,29 @@ export class Card {
         let v = Math.min((ts - this.zero) / this.flipDuration, 1)
         if (v <=  0.5) {
             Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this, "h", this.h_old, 0, "easeout")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectTitle.style, "opacity", 100, 0, "easeoutx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectDescription.style, "opacity", 100, 0, "easeoutx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectImg.style, "opacity", 100, 0, "easeoutx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectLink.style, "opacity", 100, 0, "easeoutx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectExpand.style, "opacity", 100, 0, "easeoutx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this.projectCollapse.style, "opacity", 100, 0, "easeoutx2", "%")
         } else {
-            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this, "h", 0, this.h_old, "easeout")
+            // change project here and only set once!!!!
+            if (this.project.name != Utils.cards[this.cardIdx].name) this.project = Utils.cards[this.cardIdx]
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this, "h", 0, this.h_old, "easein")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectTitle.style, "opacity", 0, 100, "easeinx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectDescription.style, "opacity", 0, 100, "easeinx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectImg.style, "opacity", 0, 100, "easeinx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectLink.style, "opacity", 0, 100, "easeinx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectExpand.style, "opacity", 0, 100, "easeinx2", "%")
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectCollapse.style, "opacity", 0, 100, "easeinx2", "%")
         }
+        cl(this.projectImg.style.opacity)
         this.render()
         if (v < 1) {
             requestAnimationFrame((t) => this.flipVertical(t))
         } else {
-            this.clearProject()
+            this.img = null
             this.animating = false
         }
     }

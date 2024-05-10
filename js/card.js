@@ -89,6 +89,7 @@ export class Card {
         this.projectImg = document.createElement("img")
         this.projectImg.style.position = "absolute"
         this.projectImg.style.height = "20vmin"
+        this.projectImg.style.width = "20vmin"
         this.projectImg.id = "project-img"
         document.getElementById("polygon-div").appendChild(this.projectImg)
         // this.projectImg.src = obj.project.closedImg
@@ -134,7 +135,7 @@ export class Card {
         // let y = this.y + document.getElementById("site-header").clientHeight
         let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight + 18/2
         // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
-        cl([this.x, x, this.projectImg.width/2 - this.openXOffset/2])
+        cl([this.x, x, this.projectImg.width, this.projectImg.height, this.projectImg.width/2 - this.openXOffset/2])
         if (x && y) {
             this.projectImg.style.left = `${x}px`
             this.projectImg.style.top = `${y}px`
@@ -393,7 +394,7 @@ export class Card {
     // open animation
     openCard(ts) {
         let v = Math.min((ts - this.zero) / this.openDuration, 1)
-        Utils.animateProperty(v, this, "w", this.w_old, this.w_old + this.openXDist, "easein")
+        Utils.animateProperty(v, this, "w", this.w_old, this.w_old + this.openXDist, "easeinx2")
         Utils.animateProperty(v, this, "openXOffset", 0, this.openXDist, "easeinx2")
         Utils.animateProperty(v, this.projectTitle.style, "opacity", 0, 100, "easeinx2", "%")
         Utils.animateProperty(v, this.projectDescription.style, "opacity", 0, 100, "easeinx2", "%")
@@ -409,7 +410,7 @@ export class Card {
     // close animation
     closeCard(ts) {
         let v = Math.min((ts - this.zero) / this.closeDuration, 1)
-        Utils.animateProperty(v, this, "w", this.w_old, this.w_old - this.openXDist, "easeout")
+        Utils.animateProperty(v, this, "w", this.w_old, this.w_old - this.openXDist, "easeoutx2")
         Utils.animateProperty(v, this, "openXOffset", this.openXDist, 0, "easeoutx2")
         Utils.animateProperty(v, this.projectTitle.style, "opacity", 100, 0, "easeoutx2", "%")
         Utils.animateProperty(v, this.projectDescription.style, "opacity", 100, 0, "easeoutx2", "%")

@@ -145,7 +145,7 @@ class App {
         } else {
             console.log("creating new card")
             this.centerCard = new Card({
-                x: this._x,
+                x: this.center_card_x,
                 y: this.center_card_y,
                 w: this.center_card_w,
                 h: this.center_card_h,

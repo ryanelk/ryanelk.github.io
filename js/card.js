@@ -391,47 +391,26 @@ export class Card {
 
     // open animation
     openCard(ts) {
-        // console.log("open")
-        // console.log([ts, this.zero, this.w_old])
-        // determine interpolation style
-        let v = (ts - this.zero) / this.openDuration
-        // interpolate values from 0-1
+        let v = Math.min((ts - this.zero) / this.openDuration, 1)
+        Utils.animateProperty(v, this, "w", this.w_old, this.w_old + this.openXDist, "easein")
+        Utils.animateProperty(v, this, "openXOffset", 0, this.openXDist, "easeinx2")
+        this.render()
         if (v < 1) {
-            // set values with v
-            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old + this.openXDist, v, "easein"))
-            // move other elements
-            this.openXOffset = Math.floor(Utils.lerp(0, this.openXDist, v, "easeinx2"))
-            this.render()
             requestAnimationFrame((t) => this.openCard(t))
         } else {
-            console.log("animation done")
-            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old + this.openXDist, 1, "easein"))
-            this.openXOffset = Math.floor(Utils.lerp(0, this.openXDist, 1, "easeinx2"))
-            this.render()
-            // animation done
             this.animating = false
         }
     }
 
     // close animation
     closeCard(ts) {
-        // console.log("close")
-        // console.log([ts, this.zero, this.w_old])
-        // determine interpolation style
-        let v = (ts - this.zero) / this.closeDuration
-        // interpolate values from 0-1
+        let v = Math.min((ts - this.zero) / this.closeDuration, 1)
+        Utils.animateProperty(v, this, "w", this.w_old, this.w_old - this.openXDist, "easeout")
+        Utils.animateProperty(v, this, "openXOffset", this.openXDist, 0, "easeoutx2")
+        this.render()
         if (v < 1) {
-            // set values with v
-            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old - this.openXDist, v, "easeout"))
-            this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, v, "easeoutx2"))
-            this.render()
             requestAnimationFrame((t) => this.closeCard(t))
         } else {
-            console.log("animation done")
-            this.w = Math.floor(Utils.lerp(this.w_old, this.w_old - this.openXDist, 1, "easeout"))
-            this.openXOffset = Math.floor(Utils.lerp(this.openXDist, 0, 1, "easeoutx2"))
-            this.render()
-            // animation done
             this.animating = false
         }
     }
@@ -442,25 +421,17 @@ export class Card {
     }
 
     flipVertical(ts) {
-        let v = (ts - this.zero) / this.flipDuration
-        // reduce card and components to width 0
-        // need to perform in two stages
-        if (v <= 0.5) {
-            // set values with v
-            this.h = Math.floor(Utils.lerp(this.h_old, 0, Utils.mapRange(v, 0, 0.5, 0, 1), "easeout"))
-            this.render()
-            requestAnimationFrame((t) => this.flipVertical(t))
-        } else if (v < 1) {
-            // load next project if necessary
-            this.h = Math.floor(Utils.lerp(0, this.h_old, Utils.mapRange(v, 0.5, 1, 0, 1), "easeout"))
-            this.render()
+        let v = Math.min((ts - this.zero) / this.flipDuration, 1)
+        if (v <=  0.5) {
+            Utils.animateProperty(Utils.mapRange(v, 0, 0.5, 0, 1), this, "h", this.h_old, 0, "easeout")
+        } else {
+            Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this, "h", 0, this.h_old, "easeout")
+        }
+        this.render()
+        if (v < 1) {
             requestAnimationFrame((t) => this.flipVertical(t))
         } else {
             this.clearProject()
-            console.log("animation done")
-            this.h = Math.floor(Utils.lerp(0, this.h_old, 1, "easeout"))
-            this.render()
-            // animation done
             this.animating = false
         }
     }
@@ -478,19 +449,13 @@ export class Card {
     }
 
     move(ts) {
-        let v = (ts - this.zero) / this.returnDuration
+        let v = Math.min((ts - this.zero) / this.returnDuration, 1)
+        Utils.animateProperty(v, this, "x", this.x_old, this.x_old + (this.x_new - this.x_old), "easeoutx2")
+        Utils.animateProperty(v, this, "y", this.y_old, this.y_old + (this.y_new - this.y_old), "easeoutx2")
+        this.render()
         if (v < 1) {
-            // set values with v
-            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), v, "easeoutx2"))
-            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), v, "easeoutx2"))
-            this.render()
             requestAnimationFrame((t) => this.move(t))
         } else {
-            console.log("animation done")
-            this.x = Math.floor(Utils.lerp(this.x_old, this.x_old + (this.x_new - this.x_old), 1, "easeoutx2"))
-            this.y = Math.floor(Utils.lerp(this.y_old, this.y_old + (this.y_new - this.y_old), 1, "easeoutx2"))
-            this.render()
-            // animation done
             this.animating = false
         }
     }

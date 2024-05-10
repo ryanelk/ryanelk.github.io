@@ -90,8 +90,8 @@ export class Utils {
         return from + (to - from) * t
     }
 
-    static animateProperty(ts, element, property, duration, interpolation) {
-
+    static animateProperty(v, element, property, start, end, interpolation) {
+        element[property] = Math.floor(Utils.lerp(start, end, v, interpolation))
     }
 
     static mapRange(v, start_0, end_0, start_1, end_1) {

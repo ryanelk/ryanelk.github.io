@@ -37,7 +37,7 @@ class App {
 
         // disable/hide elements that shouldn't be active
         this.backBtn.classList.add("disabled")
-        this.volumeBtn.classList.add("disabled")
+        // this.volumeBtn.classList.add("disabled")
 
         // add info
         this.projectInfo.innerHTML = Utils.cards[this.cardIdx].name

@@ -1,5 +1,4 @@
 import { Utils } from "./utils.js"
-const PI2 = Math.PI * 2;
 
 let cl = console.log
 
@@ -188,8 +187,8 @@ export class Card {
 
     renderExpandBtn() {
         // console.log("render expand button")
-        let x = this.x + (this.w/2 - this.w/12) + this.openXOffset/12
-        let y = this.y + (this.h/2 + this.h/12)
+        let x = this.x + (this.w/2 - this.w/14) + this.openXOffset/14
+        let y = this.y + (this.h/2 + this.h/9)
 
         // use buttons
         if (this.closed) {
@@ -351,7 +350,6 @@ export class Card {
                     console.log("move")
                     this.animating = true
                     this.zero = document.timeline.currentTime
-
                     this.x_old = this.x
                     this.y_old = this.y
                     this.x_new = mouseX
@@ -395,6 +393,9 @@ export class Card {
         let v = Math.min((ts - this.zero) / this.openDuration, 1)
         Utils.animateProperty(v, this, "w", this.w_old, this.w_old + this.openXDist, "easein")
         Utils.animateProperty(v, this, "openXOffset", 0, this.openXDist, "easeinx2")
+        Utils.animateProperty(v, this.projectTitle.style, "opacity", 0, 100, "easeinx2", "%")
+        Utils.animateProperty(v, this.projectDescription.style, "opacity", 0, 100, "easeinx2", "%")
+        Utils.animateProperty(v, this.projectLink.style, "opacity", 0, 100, "easeinx2", "%")
         this.render()
         if (v < 1) {
             requestAnimationFrame((t) => this.openCard(t))
@@ -408,6 +409,9 @@ export class Card {
         let v = Math.min((ts - this.zero) / this.closeDuration, 1)
         Utils.animateProperty(v, this, "w", this.w_old, this.w_old - this.openXDist, "easeout")
         Utils.animateProperty(v, this, "openXOffset", this.openXDist, 0, "easeoutx2")
+        Utils.animateProperty(v, this.projectTitle.style, "opacity", 100, 0, "easeoutx2", "%")
+        Utils.animateProperty(v, this.projectDescription.style, "opacity", 100, 0, "easeoutx2", "%")
+        Utils.animateProperty(v, this.projectLink.style, "opacity", 100, 0, "easeoutx2", "%")
         this.render()
         if (v < 1) {
             requestAnimationFrame((t) => this.closeCard(t))
@@ -442,18 +446,15 @@ export class Card {
             Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectExpand.style, "opacity", 0, 100, "easeinx2", "%")
             Utils.animateProperty(Utils.mapRange(v, 0.5, 1, 0, 1), this.projectCollapse.style, "opacity", 0, 100, "easeinx2", "%")
         }
-        cl(this.projectImg.style.opacity)
         this.render()
         if (v < 1) {
             requestAnimationFrame((t) => this.flipVertical(t))
         } else {
-            this.img = null
             this.animating = false
         }
     }
 
     clearProject() {
-        console.log(this.img)
         if (this.img) {
             this.img = null
         }

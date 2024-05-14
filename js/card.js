@@ -43,6 +43,7 @@ export class Card {
     initHtml(obj) {
         this.projectTitle = document.createElement("div")
         this.projectTitle.classList.add("project-title")
+        this.projectTitle.classList.add("font-outfit")
         this.projectTitle.id = "project-title"
         document.getElementById("polygon-div").appendChild(this.projectTitle)
         this.projectTitle.style.visibility= "hidden"
@@ -51,6 +52,7 @@ export class Card {
 
         this.projectDescription = document.createElement("div")
         this.projectDescription.classList.add("project-description")
+        this.projectDescription.classList.add("font-outfit")
         this.projectDescription.id = "project-description"
         document.getElementById("polygon-div").appendChild(this.projectDescription)
         this.projectDescription.style.visibility= "hidden"

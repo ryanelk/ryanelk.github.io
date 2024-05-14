@@ -1,5 +1,4 @@
 import { Card } from "./card.js"
-import { Rectangle } from "./rectangle.js"
 import { Utils } from "./utils.js"
 
 let cl = console.log

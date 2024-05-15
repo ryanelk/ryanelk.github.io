@@ -108,8 +108,8 @@ class App {
 
         this.center_card_x = this.canvasWidth / 2
         this.center_card_y = this.canvasHeight / 2
-        this.center_card_w = this.canvasWidth / 4
-        this.center_card_h = this.canvasHeight / 3
+        this.center_card_w = this.canvasWidth / 3.2
+        this.center_card_h = this.canvasHeight / 2.4
         this.centerCard = new Card({
             x: this.center_card_x,
             y: this.center_card_y,

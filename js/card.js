@@ -94,7 +94,7 @@ export class Card {
         this.projectImg = document.createElement("img")
         this.projectImg.classList.add("project-img")
         this.projectImg.style.position = "absolute"
-        this.projectImg.style.width = "22vmin"
+        this.projectImg.style.width = "30vmin"
         this.projectImg.id = "project-img"
         document.getElementById("projects-div").appendChild(this.projectImg)
         // this.projectImg.src = obj.project.closedImg
@@ -137,7 +137,7 @@ export class Card {
         this.projectImg.src = this.project.closedImg
 
         let x = this.x - this.projectImg.width/2 - this.openXOffset/2
-        let y = this.y - this.h/7 + this.htmlOffset
+        let y = this.y - this.h/5 + this.htmlOffset
         // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
         cl([this.x, x, this.projectImg.width, this.projectImg.height, this.projectImg.width/2 - this.openXOffset/2])
         if (x && y) {
@@ -179,7 +179,7 @@ export class Card {
     renderProjectLink() {
         if (!this.closed) {
             let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
-            let y = this.y + (this.h/2 - this.h/26 + this.htmlOffset)
+            let y = this.y + (this.h/1.8 + this.htmlOffset)
 
             this.projectLink.classList.remove("disabled-canvas")
             this.projectLink.style.left = `${x}px`
@@ -195,7 +195,7 @@ export class Card {
     renderExpandBtn() {
         // console.log("render expand button")
         let x = this.x + (this.w/2 - this.w/14) + this.openXOffset/14
-        let y = this.y + (this.h/2 + this.h/5.5) + this.htmlOffset
+        let y = this.y + (this.h/2 + this.h/6) + this.htmlOffset
 
         // use buttons
         if (this.closed) {

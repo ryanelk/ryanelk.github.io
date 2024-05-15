@@ -1,14 +1,15 @@
-import { Card } from "./card.js"
 import { Utils } from "./utils.js"
+import { Bio } from "./bio.js"
+import { Link } from "./link.js"
 
 let cl = console.log
 
-class App {
+class Landing {
 
     constructor() {
         this.canvas = document.createElement('canvas')
-        this.canvas.id = "polygon-canvas"
-        document.getElementById("polygon-div").appendChild(this.canvas)
+        this.canvas.id = "projects-canvas"
+        document.getElementById("projects-div").appendChild(this.canvas)
         this.ctx = this.canvas.getContext('2d')
 
         this.isDown = false
@@ -83,7 +84,7 @@ class App {
         this.projectTitle = document.createElement("div")
         this.projectTitle.classList.add("bio")
         this.projectTitle.id = "bio"
-        document.getElementById("polygon-div").appendChild(this.projectTitle)
+        document.getElementById("projects-div").appendChild(this.projectTitle)
         this.projectTitle.innerHTML = Utils.bio
         // create button for enabling
     }
@@ -96,8 +97,8 @@ class App {
 
         let new_x = this.canvas.clientWidth / 2
         let new_y = this.canvas.clientHeight / 2
-        let new_w = this.canvas.clientWidth / 4
-        let new_h = this.canvas.clientHeight / 3
+        let new_w = this.canvas.clientWidth / 2
+        let new_h = this.canvas.clientHeight / 1.5
         if (this.centerCard && (this.center_card_x != new_x || this.center_card_y != new_y || this.center_card_w != new_w || this.center_card_h != new_h)) {
             // console.log("rerendering card")
             // rerender project info and arrows
@@ -127,8 +128,8 @@ class App {
 
         this.center_card_x = this.canvas.width / 2
         this.center_card_y = this.canvas.height / 2
-        this.center_card_w = this.canvas.width / 4
-        this.center_card_h = this.canvas.height / 3
+        this.center_card_w = this.canvas.width / 3.2
+        this.center_card_h = this.canvas.height / 2.4
         if (this.centerCard) {
             // console.log("rerendering card")
             // rerender project info and arrows
@@ -250,5 +251,5 @@ class App {
 }
 
 window.onload = () => {
-    new App();
+    new Landing();
 }

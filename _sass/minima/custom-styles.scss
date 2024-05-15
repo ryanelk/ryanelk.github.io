@@ -172,6 +172,10 @@
     transform: translateX(-50%);
   }
 
+  .project-img {
+    border-radius: 5%;
+  }
+
   
 
   .disabled {
@@ -188,17 +192,17 @@
   }
 
 /**
- * Polygon
+ * Projects
  */
 
- .polygon-div {
+ .projects-div {
     width: 100%;
     height: 100%;
-    background-color: $polygon-background-color;
+    background-color: $projects-background-color;
   }
   
-  .polygon-img {
-    position:fixed;
+  .projects-img {
+    object-fit: cover;
     z-index: 1;
   }
 

@@ -29,6 +29,7 @@ export class Card {
     }
 
     initPos(obj) {
+        cl(obj)
         // cl("initPos")
         this.x = obj.x
         this.y = obj.y
@@ -38,6 +39,8 @@ export class Card {
         this.openXOffset = (this.closed) ? 0 : this.openXDist
         this.w_ = obj.w
         this.h_ = obj.h
+        this.htmlOffset = document.getElementById("site-header").getBoundingClientRect().height
+        cl(this.htmlOffset)
     }
 
     initHtml(obj) {
@@ -45,7 +48,7 @@ export class Card {
         this.projectTitle.classList.add("project-title")
         this.projectTitle.classList.add("font-outfit")
         this.projectTitle.id = "project-title"
-        document.getElementById("polygon-div").appendChild(this.projectTitle)
+        document.getElementById("projects-div").appendChild(this.projectTitle)
         this.projectTitle.style.visibility= "hidden"
         this.projectTitle.style.fontSize = "1.7vh"
         this.projectTitle.innerHTML = obj.project.name
@@ -54,7 +57,7 @@ export class Card {
         this.projectDescription.classList.add("project-description")
         this.projectDescription.classList.add("font-outfit")
         this.projectDescription.id = "project-description"
-        document.getElementById("polygon-div").appendChild(this.projectDescription)
+        document.getElementById("projects-div").appendChild(this.projectDescription)
         this.projectDescription.style.visibility= "hidden"
         this.projectDescription.style.fontSize = "1.7vmin"
         this.projectDescription.innerHTML = obj.project.description
@@ -65,7 +68,7 @@ export class Card {
         this.projectExpand.style.position = "absolute"
         this.projectExpand.style.fontSize = "1.7vh"
         this.projectExpand.id = "project-expand"
-        document.getElementById("polygon-div").appendChild(this.projectExpand)
+        document.getElementById("projects-div").appendChild(this.projectExpand)
         this.projectExpand.innerHTML = "expand_content"
         this.projectExpand.addEventListener('click', this.onExpand.bind(this), false)
 
@@ -74,7 +77,7 @@ export class Card {
         this.projectCollapse.classList.add("disabled-canvas")
         this.projectCollapse.style.position = "absolute"
         this.projectCollapse.id = "project-collapse"
-        document.getElementById("polygon-div").appendChild(this.projectCollapse)
+        document.getElementById("projects-div").appendChild(this.projectCollapse)
         this.projectCollapse.innerHTML = "collapse_content"
         this.projectCollapse.addEventListener('click', this.onExpand.bind(this), false)
 
@@ -84,16 +87,16 @@ export class Card {
         this.projectLink.style.position = "absolute"
         this.projectLink.style.fontSize = "1.7vh"
         this.projectLink.id = "project-link"
-        document.getElementById("polygon-div").appendChild(this.projectLink)
+        document.getElementById("projects-div").appendChild(this.projectLink)
         this.projectLink.innerHTML = "link"
         this.projectLink.addEventListener('click', this.onLink.bind(this), false)
 
         this.projectImg = document.createElement("img")
+        this.projectImg.classList.add("project-img")
         this.projectImg.style.position = "absolute"
-        this.projectImg.style.height = "20vmin"
-        this.projectImg.style.width = "20vmin"
+        this.projectImg.style.width = "22vmin"
         this.projectImg.id = "project-img"
-        document.getElementById("polygon-div").appendChild(this.projectImg)
+        document.getElementById("projects-div").appendChild(this.projectImg)
         // this.projectImg.src = obj.project.closedImg
     }
 
@@ -102,7 +105,7 @@ export class Card {
         if (!this.rendering) {
             // console.log("rendering")
             this.rendering = true
-            this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
+            this.ctx.clearRect(0, 0, this.ctx.canvas.clientWidth, this.ctx.canvas.clientHeight)
             this.renderBackground()
             this.renderProject()
             // this.renderTest()
@@ -127,15 +130,14 @@ export class Card {
         this.ctx.restore()
     }
 
-    renderProjectImage() {
+    renderProjectImg() {
         // console.log("render project image")
         // this.projectImg.src = "/assets/images/dot.png"
             // let x = this.x - this.openXOffset/2
         this.projectImg.src = this.project.closedImg
 
         let x = this.x - this.projectImg.width/2 - this.openXOffset/2
-        // let y = this.y + document.getElementById("site-header").clientHeight
-        let y = this.y - this.projectImg.height/2 + document.getElementById("site-header").clientHeight + 18/2
+        let y = this.y - this.h/7 + this.htmlOffset
         // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
         cl([this.x, x, this.projectImg.width, this.projectImg.height, this.projectImg.width/2 - this.openXOffset/2])
         if (x && y) {
@@ -154,7 +156,7 @@ export class Card {
         if (!this.closed) {
             this.projectTitle.style.visibility= "visible"
             this.projectTitle.style.left = `${(this.x + this.w/4)}px`
-            this.projectTitle.style.top = `${this.y - this.h/6}px`
+            this.projectTitle.style.top = `${this.y - this.h/6 + this.htmlOffset}px`
             this.projectTitle.innerHTML = this.project.name
         } else {
             this.projectTitle.style.visibility= "hidden"
@@ -167,7 +169,7 @@ export class Card {
             this.projectDescription.style.visibility= "visible"
             this.projectDescription.style.width = `${this.w_/1.5}px`
             this.projectDescription.style.left = `${(this.x + this.w/4)}px`
-            this.projectDescription.style.top = `${this.y - this.h/18}px`
+            this.projectDescription.style.top = `${this.y - this.h/18 + this.htmlOffset}px`
             this.projectDescription.innerHTML = this.project.description
         } else {
             this.projectDescription.style.visibility= "hidden"
@@ -177,7 +179,7 @@ export class Card {
     renderProjectLink() {
         if (!this.closed) {
             let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
-            let y = this.y + (this.h/2 - this.h/26)
+            let y = this.y + (this.h/2 - this.h/26 + this.htmlOffset)
 
             this.projectLink.classList.remove("disabled-canvas")
             this.projectLink.style.left = `${x}px`
@@ -193,7 +195,7 @@ export class Card {
     renderExpandBtn() {
         // console.log("render expand button")
         let x = this.x + (this.w/2 - this.w/14) + this.openXOffset/14
-        let y = this.y + (this.h/2 + this.h/9)
+        let y = this.y + (this.h/2 + this.h/5.5) + this.htmlOffset
 
         // use buttons
         if (this.closed) {
@@ -223,7 +225,7 @@ export class Card {
             this.ctx.drawImage(this.dragIndicator, x, y)
         } else {
             this.dragIndicator = new Image();
-            // this.img.className = 'polygon-img'
+            // this.img.className = 'projects-img'
 
             // when image is loaded, position relative to parent
             this.dragIndicator.onload = () => {
@@ -238,7 +240,7 @@ export class Card {
 
     renderProject() {
         // console.log("render project")
-        this.renderProjectImage()
+        this.renderProjectImg()
         this.renderProjectTitle()
         this.renderProjectDescription()
         this.renderProjectLink()

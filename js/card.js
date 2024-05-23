@@ -39,7 +39,7 @@ export class Card {
         this.openXOffset = (this.closed) ? 0 : this.openXDist
         this.w_ = obj.w
         this.h_ = obj.h
-        this.htmlOffset = document.getElementById("site-header").getBoundingClientRect().height
+        this.htmlOffset = document.getElementById("projects-canvas").getBoundingClientRect().top
         cl(this.htmlOffset)
     }
 
@@ -95,6 +95,7 @@ export class Card {
         this.projectImg.classList.add("project-img")
         this.projectImg.style.position = "absolute"
         this.projectImg.style.width = "30vmin"
+        this.projectImg.style.height = "25vmin"
         this.projectImg.id = "project-img"
         document.getElementById("projects-div").appendChild(this.projectImg)
         // this.projectImg.src = obj.project.closedImg
@@ -115,11 +116,12 @@ export class Card {
 
     renderTest() {
         // console.log("render inner rect")
+        cl(["test", this.y])
         this.ctx.save();
         this.ctx.beginPath();
-        let w = 1
-        let h = 1
-        let x = this.x + (this.openXOffset/2)
+        let w = 2
+        let h = 2
+        let x = this.x - this.openXOffset/2
         let y = this.y
         this.ctx.strokeStyle = "#010000"
         this.ctx.fillStyle = "#010000"
@@ -136,10 +138,11 @@ export class Card {
             // let x = this.x - this.openXOffset/2
         this.projectImg.src = this.project.closedImg
 
-        let x = this.x - this.projectImg.width/2 - this.openXOffset/2
-        let y = this.y - this.h/5 + this.htmlOffset
-        // cl([y, this.y, this.projectImg.height/2, document.getElementById("site-header").clientHeight,  18])
-        cl([this.x, x, this.projectImg.width, this.projectImg.height, this.projectImg.width/2 - this.openXOffset/2])
+        let x = this.x + this.projectImg.width/2 - this.openXOffset/2
+        // let x = this.x - this.projectImg.width/2 - this.openXOffset/2
+        // let y = this.y - this.htmlOffset
+        let y = this.y + this.htmlOffset - this.projectImg.height/2 + this.h * .53
+        cl([y, this.y, this.projectImg.height/2])
         if (x && y) {
             this.projectImg.style.left = `${x}px`
             this.projectImg.style.top = `${y}px`
@@ -152,11 +155,11 @@ export class Card {
         // this.ctx.font = '48px Roboto-Regular';
         // this.ctx.textAlign = "center"
         // this.ctx.fillText('HELLO WORLD', this.x + this.openXOffset/2, this.y - this.h/4);
-
+        let i_w = this.w_ - this.w_/6
         if (!this.closed) {
             this.projectTitle.style.visibility= "visible"
-            this.projectTitle.style.left = `${(this.x + this.w/4)}px`
-            this.projectTitle.style.top = `${this.y - this.h/6 + this.htmlOffset}px`
+            this.projectTitle.style.left = `${(this.x + this.openXOffset/2 + this.w_/12 + i_w * .53)}px`
+            this.projectTitle.style.top = `${this.y + this.htmlOffset + this.h * .20}px`
             this.projectTitle.innerHTML = this.project.name
         } else {
             this.projectTitle.style.visibility= "hidden"
@@ -165,11 +168,12 @@ export class Card {
 
     renderProjectDescription() {
         // console.log("render project description")
+        let i_w = this.w_ - this.w_/6
         if (!this.closed) {
             this.projectDescription.style.visibility= "visible"
             this.projectDescription.style.width = `${this.w_/1.5}px`
-            this.projectDescription.style.left = `${(this.x + this.w/4)}px`
-            this.projectDescription.style.top = `${this.y - this.h/18 + this.htmlOffset}px`
+            this.projectDescription.style.left = `${(this.x + this.openXOffset/2 + this.w_/12 + i_w * .53)}px`
+            this.projectDescription.style.top = `${this.y + this.htmlOffset + this.h * .35}px`
             this.projectDescription.innerHTML = this.project.description
         } else {
             this.projectDescription.style.visibility= "hidden"
@@ -178,8 +182,12 @@ export class Card {
 
     renderProjectLink() {
         if (!this.closed) {
-            let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
-            let y = this.y + (this.h/1.8 + this.htmlOffset)
+            // let x = this.x + (this.w/2 - this.w/5) + this.openXOffset/5
+            // let y = this.y + (this.h/1.8 + this.htmlOffset)
+            cl([this.x, this.y, this.projectLink.style.width/2, this.projectLink.style.height/2])
+            let i_w = this.w_ - this.w_/6
+            let x = this.x + this.openXOffset/2 + this.w_/12 + i_w * .9
+            let y = this.y + this.htmlOffset + this.h * .88
 
             this.projectLink.classList.remove("disabled-canvas")
             this.projectLink.style.left = `${x}px`
@@ -194,8 +202,14 @@ export class Card {
 
     renderExpandBtn() {
         // console.log("render expand button")
-        let x = this.x + (this.w/2 - this.w/14) + this.openXOffset/14
-        let y = this.y + (this.h/2 + this.h/6) + this.htmlOffset
+        cl(["expand", this.y, this.htmlOffset, document.getElementById("projects-canvas").getBoundingClientRect().top])
+        // let x = this.x + (this.w * .9)
+        let i_w = this.w_ - this.w_/6
+        let x = this.x + this.openXOffset/2 + this.w_/6 + i_w * .95
+        // this.w_/12 + (i_w)
+        let y = this.y + this.htmlOffset + this.h * .98
+        // let y = (this.y + this.htmlOffset) + this.projectLink.getBoundingClientRect().height/2 + this.h / 2.8
+        // cl([this.h, this.h/2.1, this.y, this.htmlOffset])
 
         // use buttons
         if (this.closed) {
@@ -220,8 +234,8 @@ export class Card {
         let x, y
         if (this.dragIndicator) {
             // console.log("openx: " + this.openXOffset/2)
-            x = this.x - (this.w/2 - this.w/60) - this.openXOffset/60
-            y = this.y - this.dragIndicator.height/2 
+            x = this.x - this.openXOffset/2 + this.w * .01
+            y = this.y + this.h/2 - this.dragIndicator.height/2
             this.ctx.drawImage(this.dragIndicator, x, y)
         } else {
             this.dragIndicator = new Image();
@@ -229,8 +243,8 @@ export class Card {
 
             // when image is loaded, position relative to parent
             this.dragIndicator.onload = () => {
-                x = this.x - (this.w/2 - this.w/60) - this.openXOffset/60
-                y = this.y - this.dragIndicator.height/2 
+                x = this.x - this.openXOffset/2 + this.w * .01
+                y = this.y + this.h/2 - this.dragIndicator.height/2
                 this.ctx.drawImage(this.dragIndicator, x, y)
             }
             // use path from given project
@@ -251,8 +265,8 @@ export class Card {
     renderShadow() {
         this.ctx.save();
         this.ctx.beginPath();
-        let x = this.x - this.w/2
-        let y = this.y - this.h/2
+        let x = this.x - this.openXOffset/2
+        let y = this.y
         this.ctx.strokeStyle = "#77787a"
         this.ctx.fillStyle = "#77787a"
         this.ctx.roundRect(x - 4, y + 4, this.w, this.h, 5)
@@ -266,10 +280,11 @@ export class Card {
         // console.log("render outer rect")
         this.ctx.save();
         this.ctx.beginPath();
-        let x = this.x - this.w/2
-        let y = this.y - this.h/2
+        let x = this.x - this.openXOffset/2
+        let y = this.y
         this.ctx.strokeStyle = "#C5B7B7"
         this.ctx.fillStyle = "#C5B7B7"
+        cl([this.x, this.y, this.w, this.h])
         this.ctx.roundRect(x, y, this.w, this.h, 5)
         this.ctx.stroke()
         this.ctx.fill()
@@ -283,8 +298,8 @@ export class Card {
         this.ctx.beginPath();
         let w = this.w_ - this.w_/6
         let h = this.h - this.h/6
-        let x = this.x - (w/2 + this.openXOffset/2)
-        let y = this.y - h/2
+        let x = this.x - this.openXOffset/2 + this.w_/12
+        let y = this.y + this.h/12
         this.ctx.strokeStyle = "#FFFFFF"
         this.ctx.fillStyle = "#FFFFFF"
         this.ctx.roundRect(x, y, w, h, 5)
@@ -300,8 +315,8 @@ export class Card {
         this.ctx.beginPath();
         let w = this.w_ - this.w_/6
         let h = this.h - this.h/6
-        let x = this.x - w/2 + (this.openXOffset/2)
-        let y = this.y - h/2
+        let x = this.x + this.openXOffset/2 + this.w_/12
+        let y = this.y + this.h/12
         this.ctx.strokeStyle = "#FFFFFF"
         this.ctx.fillStyle = "#FFFFFF"
         this.ctx.roundRect(x, y, w, h, 5)

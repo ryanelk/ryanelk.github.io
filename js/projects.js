@@ -23,7 +23,6 @@ class App {
         cl([document.getElementById("site-header").getBoundingClientRect(),document.getElementById("site-footer").getBoundingClientRect()])
         this.canvasHeight = rect.height - (document.getElementById("site-header").getBoundingClientRect().height + document.getElementById("site-footer").getBoundingClientRect().height)
         this.canvasWidth = rect.width
-        cl([this.canvasHeight, this.canvasWidth])
 
         this.canvas.height = this.canvasHeight
         this.canvas.width = this.canvasWidth
@@ -106,10 +105,10 @@ class App {
         document.getElementById('project-info').addEventListener('click', this.onExpand.bind(this), false);
         document.getElementById('arrow-forward').addEventListener('click', this.onForward.bind(this), false);
 
-        this.center_card_x = this.canvasWidth / 2
-        this.center_card_y = this.canvasHeight / 2
         this.center_card_w = this.canvasWidth / 3.2
         this.center_card_h = this.canvasHeight / 2.4
+        this.center_card_x = this.canvasWidth / 2 - (this.center_card_w / 2)
+        this.center_card_y = this.canvasHeight / 2 - (this.center_card_h / 2)
         this.centerCard = new Card({
             x: this.center_card_x,
             y: this.center_card_y,
@@ -148,14 +147,20 @@ class App {
     resizeProjects() {
         if (this.mode != "projects") return
         cl("resizing")
-        let canvasHeight = document.body.clientHeight - (document.getElementById("site-header").clientHeight + document.getElementById("site-footer").clientHeight)
-        this.canvasHeight = canvasHeight
-        this.canvasWidth = this.canvas.clientWidth
+        let rect = this.div.getBoundingClientRect()
+        cl(rect)
 
-        let new_x = this.canvasWidth / 2
-        let new_y = this.canvasHeight / 2
-        let new_w = this.canvasWidth / 2
-        let new_h = this.canvasHeight / 1.5
+        this.canvasHeight = rect.height - (document.getElementById("site-header").getBoundingClientRect().height + document.getElementById("site-footer").getBoundingClientRect().height)
+        this.canvasWidth = rect.width
+
+        this.canvas.height = this.canvasHeight
+        this.canvas.width = this.canvasWidth
+
+        
+        let new_w = this.canvasWidth / 3.2
+        let new_h = this.canvasHeight / 2.4
+        let new_x = this.canvasWidth / 2 - (new_w/2)
+        let new_y = this.canvasHeight / 2 - (new_h/2)
         if (this.centerCard && (this.center_card_x != new_x || this.center_card_y != new_y || this.center_card_w != new_w || this.center_card_h != new_h)) {
             // console.log("rerendering card")
             // rerender project info and arrows
@@ -169,6 +174,7 @@ class App {
                 w: this.center_card_w,
                 h: this.center_card_h,
             })
+            this.centerCard.render()
         }
     }
 
@@ -176,11 +182,7 @@ class App {
         // cl([this.canvas.scrollWidth, this.canvas.scrollHeight, this.canvas.clientWidth, this.canvas.clientHeight, this.canvas.offsetWidth, this.canvas.offsetHeight])
         // cl([this.canvas.height, canvasHeight, document.body.clientHeight, window.innerHeight])
 
-        if (this.centerCard) {
-            // console.log("rerendering card")
-            // rerender project info and arrows
-            this.centerCard.render()
-        } else {
+        if (!this.centerCard) {
             console.log("creating new card")
             this.centerCard = new Card({
                 x: this.center_card_x,
@@ -194,6 +196,7 @@ class App {
             })
             // change visibility of buttons?
         }
+        this.centerCard.render()
     }
 
 

@@ -128,9 +128,20 @@
  .material-symbols-outlined {
     font-variation-settings: 'wght' 400;
     visibility: visible;
+  }
+
+  .clickable {
     &:hover {
       font-variation-settings: 'wght' 500;
       cursor: pointer;
+    }
+  }
+
+  .grabbable {
+    &:hover {
+      font-variation-settings: 'wght' 500;
+      cursor: grab;
+      pointer-events: auto;
     }
   }
 

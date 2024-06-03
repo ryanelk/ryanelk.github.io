@@ -62,6 +62,7 @@ export class Card {
 
         this.projectExpand = document.createElement("span")
         this.projectExpand.classList.add("material-symbols-outlined")
+        this.projectExpand.classList.add("clickable")
         this.projectExpand.classList.add("disabled-canvas")
         this.projectExpand.style.position = "absolute"
         this.projectExpand.id = "project-expand"
@@ -71,6 +72,7 @@ export class Card {
 
         this.projectCollapse = document.createElement("span")
         this.projectCollapse.classList.add("material-symbols-outlined")
+        this.projectCollapse.classList.add("clickable")
         this.projectCollapse.classList.add("disabled-canvas")
         this.projectCollapse.style.position = "absolute"
         this.projectCollapse.id = "project-collapse"
@@ -80,12 +82,21 @@ export class Card {
 
         this.projectLink = document.createElement("span")
         this.projectLink.classList.add("material-symbols-outlined")
+        this.projectLink.classList.add("clickable")
         this.projectLink.classList.add("disabled-canvas")
         this.projectLink.style.position = "absolute"
         this.projectLink.id = "project-link"
         document.getElementById("projects-div").appendChild(this.projectLink)
         this.projectLink.innerHTML = "link"
         this.projectLink.addEventListener('click', this.onLink.bind(this), false)
+
+        this.projectDrag = document.createElement("span")
+        this.projectDrag.classList.add("material-symbols-outlined")
+        this.projectDrag.classList.add("grabbable")
+        this.projectDrag.style.position = "absolute"
+        this.projectDrag.id = "project-drag"
+        document.getElementById("projects-div").appendChild(this.projectDrag)
+        this.projectDrag.innerHTML = "drag_indicator"
 
         this.projectImg = document.createElement("img")
         this.projectImg.classList.add("project-img")
@@ -194,7 +205,6 @@ export class Card {
                 this.projectLink.classList.add("disabled-canvas")
             }
         }
-
     }
 
     renderExpandBtn() {
@@ -224,6 +234,15 @@ export class Card {
             this.projectCollapse.style.left = `${x}px`
             this.projectCollapse.style.top = `${y}px`
         }
+    }
+
+    renderProjectDrag() {
+        let i_w = this.w_ - this.w_/6
+        let x = this.x - this.openXOffset/2 + this.w_/6 * .17
+        let y = this.y + this.htmlOffset + this.h * .5
+
+        this.projectDrag.style.left = `${x}px`
+        this.projectDrag.style.top = `${y}px`
     }
 
     renderDragIndicator() {
@@ -256,7 +275,8 @@ export class Card {
         this.renderProjectDescription()
         this.renderProjectLink()
         this.renderExpandBtn()
-        this.renderDragIndicator()
+        this.renderProjectDrag()
+        // this.renderDragIndicator()
     }
 
     renderShadow() {

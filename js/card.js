@@ -50,7 +50,6 @@ export class Card {
         this.projectTitle.id = "project-title"
         document.getElementById("projects-div").appendChild(this.projectTitle)
         this.projectTitle.style.visibility= "hidden"
-        this.projectTitle.style.fontSize = "1.7vh"
         this.projectTitle.innerHTML = obj.project.name
 
         this.projectDescription = document.createElement("div")
@@ -59,14 +58,12 @@ export class Card {
         this.projectDescription.id = "project-description"
         document.getElementById("projects-div").appendChild(this.projectDescription)
         this.projectDescription.style.visibility= "hidden"
-        this.projectDescription.style.fontSize = "1.7vmin"
         this.projectDescription.innerHTML = obj.project.description
 
         this.projectExpand = document.createElement("span")
         this.projectExpand.classList.add("material-symbols-outlined")
         this.projectExpand.classList.add("disabled-canvas")
         this.projectExpand.style.position = "absolute"
-        this.projectExpand.style.fontSize = "1.7vh"
         this.projectExpand.id = "project-expand"
         document.getElementById("projects-div").appendChild(this.projectExpand)
         this.projectExpand.innerHTML = "expand_content"
@@ -85,7 +82,6 @@ export class Card {
         this.projectLink.classList.add("material-symbols-outlined")
         this.projectLink.classList.add("disabled-canvas")
         this.projectLink.style.position = "absolute"
-        this.projectLink.style.fontSize = "1.7vh"
         this.projectLink.id = "project-link"
         document.getElementById("projects-div").appendChild(this.projectLink)
         this.projectLink.innerHTML = "link"
@@ -137,6 +133,7 @@ export class Card {
         // this.projectImg.src = "/assets/images/dot.png"
             // let x = this.x - this.openXOffset/2
         this.projectImg.src = this.project.closedImg
+        this.projectImg.alt = this.project.name
 
         let x = this.x + this.projectImg.width/2 - this.openXOffset/2
         // let x = this.x - this.projectImg.width/2 - this.openXOffset/2

@@ -145,6 +145,7 @@
   }
 
   .name {
+    font-size: clamp(.5rem, 0.75rem + 1.5vw, 1.5rem);
   }
 
   .font-outfit {
@@ -152,7 +153,6 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    font-size: x-large;
   }
 
   .project-title {
@@ -162,6 +162,7 @@
     left:50%;
     margin-right: -50%;
     transform: translateX(-50%);
+    font-size: clamp(.6rem, 0.5rem + 1.5vw, 1.3rem);
   }
 
   .project-description {
@@ -170,10 +171,15 @@
     left:50%;
     margin-right: -50%;
     transform: translateX(-50%);
+    font-size: clamp(.5rem, 0.25rem + 1.25vw, 1.3rem);
+    max-inline-size: 25ch;
   }
 
   .project-img {
+    max-inline-size: 100%;
+    block-size: auto;
     border-radius: 5%;
+    object-fit: contain;
   }
 
   

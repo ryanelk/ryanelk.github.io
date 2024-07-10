@@ -176,6 +176,12 @@ export class Utils {
             closedImg: `${window.location.origin}/assets/images/projects/11.png`,
             link: "https://snoresnax.itch.io/bands",
             description: "Zine investigating different manifestations of growth in life. Made in Procreate for Zine Jam: Growth Edition, Jan 2024"
+        },
+        {
+            name: "fishstax",
+            closedImg: `${window.location.origin}/assets/images/projects/12.png`,
+            link: "https://snoresnax.itch.io/fishstax",
+            description: "Stack fish with reactive abilities into iconic shapes. Made in Godot for Thinky Puzzle Jam 4, Jul 2024"
         }, 
     ]
 

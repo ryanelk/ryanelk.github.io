@@ -187,7 +187,7 @@ export class Utils {
             name: "lotería o llorar",
             closedImg: `${window.location.origin}/assets/images/projects/13.png`,
             link: "https://ampersands.itch.io/loteria-o-llorar",
-            description: "Rescue your perrito in a deadly game of lotería. Made in Godot for Unidos Hispanic Heritage Month, Oct 2024"
+            description: "Rescue your beloved perrito in a deadly game of lotería. Made in Godot for Unidos Hispanic Heritage Month, Oct 2024"
         },  
     ]
 

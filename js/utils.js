@@ -182,7 +182,13 @@ export class Utils {
             closedImg: `${window.location.origin}/assets/images/projects/12.png`,
             link: "https://snoresnax.itch.io/fishstax",
             description: "Stack fish with reactive abilities into iconic shapes. Made in Godot for Thinky Puzzle Jam 4, Jul 2024"
-        }, 
+        },
+        {
+            name: "lotería o llorar",
+            closedImg: `${window.location.origin}/assets/images/projects/13.png`,
+            link: "https://ampersands.itch.io/loteria-o-llorar",
+            description: "Rescue your perrito in a deadly game of lotería. Made in Godot for Unidos Hispanic Heritage Month, Oct 2024"
+        },  
     ]
 
 }

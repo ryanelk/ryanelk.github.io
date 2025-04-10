@@ -167,6 +167,16 @@
     font-style: normal;
   }
 
+  .project-container {
+    position: absolute;
+    font-weight: bold;
+    width: 50%;
+    height: 50%;
+    left:50%;
+    margin-right: -50%;
+    transform: translateX(-50%);
+  }
+
   .project-title {
     position: absolute;
     text-align: center;

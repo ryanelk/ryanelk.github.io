@@ -44,6 +44,13 @@ export class Card {
     }
 
     initHtml(obj) {
+
+        this.projectContainer = document.createElement("div")
+        this.projectContainer.classList.add("project-container")
+        document.getElementById("projects-div").appendChild(this.projectContainer)
+
+
+
         this.projectTitle = document.createElement("div")
         this.projectTitle.classList.add("project-title")
         this.projectTitle.classList.add("font-outfit")
@@ -92,7 +99,7 @@ export class Card {
 
         this.projectDrag = document.createElement("span")
         this.projectDrag.classList.add("material-symbols-outlined")
-        this.projectDrag.classList.add("grabbable")
+        // this.projectDrag.classList.add("grabbable")
         this.projectDrag.style.position = "absolute"
         this.projectDrag.id = "project-drag"
         document.getElementById("projects-div").appendChild(this.projectDrag)

@@ -188,7 +188,13 @@ export class Utils {
             closedImg: `${window.location.origin}/assets/images/projects/13.png`,
             link: "https://ampersands.itch.io/loteria-o-llorar",
             description: "Rescue your beloved perrito in a deadly game of lotería. Made in Godot for Unidos Hispanic Heritage Month, Oct 2024"
-        },  
+        },
+        {
+            name: "sonidos",
+            closedImg: `${window.location.origin}/assets/images/projects/14.png`,
+            link: "https://ampersands.itch.io/sonidos",
+            description: "Explore the lost culture of a remote island as a sound recording robot. Made in Godot for the LAGS Game Jam, Apr 2024"
+        },   
     ]
 
 }
